@@ -40,6 +40,35 @@
             $player_count = count($valid_players);
             
             $is_en = ($submitted_lang == 'en');
+
+            // Database Connection & Insertion via .env
+            $db_error = false;
+            $env_file = __DIR__ . '/.env';
+            if (file_exists($env_file)) {
+                $env = parse_ini_file($env_file);
+                if ($env !== false && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
+                    try {
+                        $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
+                        $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
+                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        
+                        $stmt = $pdo->prepare("INSERT INTO registrations (team_name, captain_name, captain_phone, captain_email, players, submitted_lang) VALUES (?, ?, ?, ?, ?, ?)");
+                        $players_json = json_encode(array_values($valid_players), JSON_UNESCAPED_UNICODE);
+                        $stmt->execute([$team_name, $captain_name, $captain_phone, $captain_email, $players_json, $submitted_lang]);
+                    } catch (PDOException $e) {
+                        error_log("Database error: " . $e->getMessage());
+                        $db_error = true;
+                    }
+                } else {
+                    error_log("Invalid or missing database credentials in .env file.");
+                    $db_error = true;
+                }
+            } else {
+                error_log(".env file not found.");
+                $db_error = true;
+            }
+
+            if (!$db_error) {
             ?>
 
             <div class="success-content">
@@ -91,7 +120,7 @@
                     </div>
                 </div>
 
-                <a href="index.php" class="back-link">
+            <a href="index.php" class="back-link">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -103,6 +132,25 @@
             </div>
 
             <?php
+            } else {
+                // Database Error Case
+                echo '<div class="success-content">
+                        <div class="success-icon" style="background-color: var(--text-main);">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:relative; z-index:2;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        </div>
+                        <h1 class="success-title tr-content" style="color: var(--text-main);">Sistem Hatası!</h1>
+                        <h1 class="success-title en-content" style="color: var(--text-main);">System Error!</h1>
+                        
+                        <p class="success-text tr-content">Kaydınızı alırken veritabanında bir sorun oluştu. Lütfen daha sonra tekrar deneyin.</p>
+                        <p class="success-text en-content">An error occurred while saving your registration to the database. Please try again later.</p>
+                        
+                        <a href="index.php" class="back-link" style="background-color: var(--text-main);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            <span class="tr-content">Geri Dön</span>
+                            <span class="en-content">Go Back</span>
+                        </a>
+                      </div>';
+            }
         } else {
             // Not a POST request
             echo '<div class="success-content">
