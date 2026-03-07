@@ -37,19 +37,11 @@ body {
     line-height: 1.6;
     position: relative;
     overflow-x: hidden;
-    /* Soft Animated Background Gradient */
-    background: linear-gradient(135deg, #f4f7f6 0%, #e0e7ff 50%, #f4f7f6 100%);
-    background-size: 200% 200%;
-    animation: bgShift 15s ease infinite alternate;
+    /* High quality dynamic volleyball background */
+    background: url('bg.png') center/cover no-repeat fixed;
 }
 
-@keyframes bgShift {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
-}
-
-/* --- VOLLEYBALL CREATIVE BACKGROUND --- */
-/* Abstract Volleyball Field Elements */
+/* Semi-transparent overlay to ensure text readability over the dynamic background */
 body::before {
     content: '';
     position: fixed;
@@ -57,131 +49,14 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Clean, abstract sports lines */
-    background-image:
-        linear-gradient(135deg, rgba(0, 45, 114, 0.03) 25%, transparent 25%),
-        linear-gradient(225deg, rgba(0, 45, 114, 0.03) 25%, transparent 25%),
-        linear-gradient(45deg, rgba(0, 45, 114, 0.03) 25%, transparent 25%),
-        linear-gradient(315deg, rgba(0, 45, 114, 0.03) 25%, transparent 25%);
-    background-size: 100px 100px;
-    z-index: -3;
-    pointer-events: none;
-}
-
-/* Semi-circle court area */
-body::after {
-    content: '';
-    position: fixed;
-    bottom: -20vh;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120vw;
-    height: 60vh;
-    border-top: 4px solid rgba(227, 24, 55, 0.15);
-    border-radius: 50%;
-    background: radial-gradient(ellipse at top, rgba(0, 45, 114, 0.02) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(0, 45, 114, 0.5) 0%, rgba(0, 20, 50, 0.9) 100%);
     z-index: -2;
     pointer-events: none;
 }
 
-/* Dynamic Action Stripes wrapping the screen */
-.action-stripes {
-    position: fixed;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 100px,
-        rgba(0, 45, 114, 0.015) 100px,
-        rgba(0, 45, 114, 0.015) 200px
-    );
-    z-index: -3;
-    pointer-events: none;
-    animation: moveStripes 60s linear infinite;
-}
 
-@keyframes moveStripes {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(282.8px); }
-}
 
-/* Floating Energy Particles */
-.particles {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -2;
-    pointer-events: none;
-}
 
-.particles::before, .particles::after {
-    content: '';
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    box-shadow: 
-        10vw 20vh 0 rgba(227, 24, 55, 0.5),
-        30vw 50vh 0 rgba(0, 45, 114, 0.5),
-        70vw 15vh 0 rgba(255, 184, 28, 0.6),
-        85vw 70vh 0 rgba(227, 24, 55, 0.4),
-        40vw 80vh 0 rgba(0, 45, 114, 0.5),
-        25vw 35vh 0 rgba(255, 184, 28, 0.5),
-        55vw 55vh 0 rgba(227, 24, 55, 0.6),
-        95vw 40vh 0 rgba(0, 45, 114, 0.4);
-    animation: floatParticles 25s linear infinite;
-}
-
-.particles::after {
-    width: 5px;
-    height: 5px;
-    box-shadow: 
-        15vw 60vh 0 rgba(0, 45, 114, 0.4),
-        50vw 25vh 0 rgba(227, 24, 55, 0.5),
-        80vw 85vh 0 rgba(255, 184, 28, 0.4),
-        5vw 80vh 0 rgba(0, 45, 114, 0.5),
-        65vw 10vh 0 rgba(227, 24, 55, 0.4);
-    animation: floatParticles 35s linear infinite reverse;
-}
-
-@keyframes floatParticles {
-    0% { transform: translateY(0) scale(1); opacity: 0; }
-    10% { opacity: 1; }
-    50% { transform: translateY(-30vh) scale(1.5); }
-    90% { opacity: 1; }
-    100% { transform: translateY(-70vh) scale(0.8); opacity: 0; }
-}
-
-/* User Provided Volleyball Image styling */
-.bg-volleyball {
-    position: fixed;
-    right: -10vw;
-    bottom: -15vh;
-    top: auto;
-    width: 50vw;
-    max-width: 700px;
-    min-width: 400px;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.9; /* Vibrant presence */
-    animation: floatUserBall 8s infinite ease-in-out alternate;
-}
-
-.user-ball {
-    width: 100%;
-    height: auto;
-    filter: drop-shadow(-15px 25px 45px rgba(0, 0, 0, 0.6));
-    animation: spinUserBall 120s linear infinite;
-}
-
-@keyframes floatUserBall {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-40px); }
-}
-
-@keyframes spinUserBall {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(-360deg); }
-}
 
 /* Clean Side Court Lines */
 .court-line {
@@ -192,8 +67,13 @@ body::after {
     z-index: -1;
 }
 
-.court-line-left { left: 5%; }
-.court-line-right { right: 5%; }
+.court-line-left {
+    left: 5%;
+}
+
+.court-line-right {
+    right: 5%;
+}
 
 /* Container */
 .container {
@@ -280,6 +160,101 @@ header p {
     margin: 0 auto;
     position: relative;
     z-index: 2;
+}
+
+/* --- KAYMALI (SLIDER) DİL SEÇİCİ --- */
+.lang-toggle-container {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 5;
+}
+
+.lang-switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0 5px;
+}
+
+.lang-switch input {
+    display: none;
+}
+
+.lang-switch .slider {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 44px;
+    height: 28px;
+    background: white;
+    border-radius: 20px;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 1;
+}
+
+.lang-switch input:checked~.slider {
+    transform: translateX(46px);
+}
+
+.lang-label {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: white;
+    z-index: 2;
+    transition: color 0.3s;
+    user-select: none;
+}
+
+/* Default TR active */
+.tr-label {
+    color: var(--isu-blue);
+}
+
+.lang-switch input:checked~.tr-label {
+    color: white;
+}
+
+.lang-switch input:checked~.en-label {
+    color: var(--isu-blue);
+}
+
+/* Float Switcher for Submit Page */
+.float-switcher {
+    background: var(--isu-blue);
+    border-color: var(--isu-blue);
+    box-shadow: 0 4px 10px rgba(0, 45, 114, 0.2);
+}
+
+.float-switcher .tr-label,
+.float-switcher .en-label {
+    color: white;
+}
+
+.float-switcher .tr-label {
+    color: var(--isu-blue);
+}
+
+.float-switcher input:checked~.tr-label {
+    color: white;
+}
+
+.float-switcher input:checked~.en-label {
+    color: var(--isu-blue);
 }
 
 /* Form Sections */
@@ -395,7 +370,8 @@ input:focus {
 }
 
 /* Player List Styles */
-#players-container {
+#players-container-tr,
+#players-container-en {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -493,7 +469,7 @@ input:focus {
     font-family: inherit;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s ease;
     border-radius: 12px;
     outline: none;
     display: flex;
@@ -505,39 +481,21 @@ input:focus {
 .btn-primary {
     width: 100%;
     padding: 1.25rem;
-    background: var(--isu-blue);
+    background: #002D72; /* Solid deep ISU blue */
     color: white;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     margin-top: 1rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 10px 20px rgba(0, 45, 114, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-/* Button swoosh effect */
-.btn-primary::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transform: skewX(-20deg);
-    transition: 0.5s;
+    letter-spacing: 0.5px;
+    border-radius: 50px; /* Fully oval */
+    box-shadow: 0 8px 15px rgba(0, 45, 114, 0.15); /* Soft, subtle shadow */
 }
 
 .btn-primary:hover {
-    background: var(--isu-blue-light);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 25px rgba(0, 45, 114, 0.3);
-}
-
-.btn-primary:hover::after {
-    left: 150%;
+    background: #002255; /* Slightly darker on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 45, 114, 0.25);
 }
 
 .btn-secondary {
@@ -714,4 +672,58 @@ input:focus {
     .form-section::before {
         display: none;
     }
+
+    .sks-logo {
+        width: 150px;
+        bottom: 1rem;
+        right: 1rem;
+    }
+}
+
+/* SKS Logo */
+.sks-logo {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 220px;
+    height: auto;
+    z-index: 10;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.4));
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.85;
+}
+
+.sks-logo:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+/* --- SEPARATE FORM LANGUAGE TOGGLING --- */
+/* By default, TR is visible, EN is hidden */
+.en-content {
+    display: none !important;
+}
+
+.tr-content {
+    display: block;
+    /* or appropriate default */
+}
+
+header h1.tr-content,
+header p.tr-content {
+    display: block;
+}
+
+/* When body has .lang-en class */
+body.lang-en .tr-content {
+    display: none !important;
+}
+
+body.lang-en .en-content {
+    display: block !important;
+}
+
+body.lang-en header h1.en-content,
+body.lang-en header p.en-content {
+    display: block !important;
 }
