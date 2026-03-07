@@ -27,49 +27,52 @@
         </div>
 
         <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $team_name = htmlspecialchars($_POST['team_name'] ?? '');
-            $captain_name = htmlspecialchars($_POST['captain_name'] ?? '');
-            $captain_email = htmlspecialchars($_POST['captain_email'] ?? '');
-            $captain_phone = htmlspecialchars($_POST['captain_phone'] ?? '');
-            $players = $_POST['players'] ?? [];
-            $submitted_lang = $_POST['submitted_lang'] ?? 'tr';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $team_name = htmlspecialchars($_POST['team_name'] ?? '');
+    $captain_name = htmlspecialchars($_POST['captain_name'] ?? '');
+    $captain_email = htmlspecialchars($_POST['captain_email'] ?? '');
+    $captain_phone = htmlspecialchars($_POST['captain_phone'] ?? '');
+    $players = $_POST['players'] ?? [];
+    $submitted_lang = $_POST['submitted_lang'] ?? 'tr';
 
-            $valid_players = array_filter($players, function ($p) {
-                return trim($p) !== '';
-            });
-            $player_count = count($valid_players);
+    $valid_players = array_filter($players, function ($p) {
+        return trim($p) !== '';
+    });
+    $player_count = count($valid_players);
 
-            $is_en = ($submitted_lang == 'en');
+    $is_en = ($submitted_lang == 'en');
 
-            $db_error = false;
-            $env_file = __DIR__ . '/.env';
-            if (file_exists($env_file)) {
-                $env = parse_ini_file($env_file);
-                if ($env !== false && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
-                    try {
-                        $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
-                        $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
-                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db_error = false;
+    $env_file = __DIR__ . '/.env';
+    if (file_exists($env_file)) {
+        $env = parse_ini_file($env_file);
+        if ($env !== false && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
+            try {
+                $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
+                $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                        $stmt = $pdo->prepare("INSERT INTO registrations (team_name, captain_name, captain_phone, captain_email, players, submitted_lang) VALUES (?, ?, ?, ?, ?, ?)");
-                        $players_json = json_encode(array_values($valid_players), JSON_UNESCAPED_UNICODE);
-                        $stmt->execute([$team_name, $captain_name, $captain_phone, $captain_email, $players_json, $submitted_lang]);
-                    } catch (PDOException $e) {
-                        error_log("Database error: " . $e->getMessage());
-                        $db_error = true;
-                    }
-                } else {
-                    error_log("Invalid or missing database credentials in .env file.");
-                    $db_error = true;
-                }
-            } else {
-                error_log(".env file not found.");
+                $stmt = $pdo->prepare("INSERT INTO registrations (team_name, captain_name, captain_phone, captain_email, players, submitted_lang) VALUES (?, ?, ?, ?, ?, ?)");
+                $players_json = json_encode(array_values($valid_players), JSON_UNESCAPED_UNICODE);
+                $stmt->execute([$team_name, $captain_name, $captain_phone, $captain_email, $players_json, $submitted_lang]);
+            }
+            catch (PDOException $e) {
+                error_log("Database error: " . $e->getMessage());
                 $db_error = true;
             }
+        }
+        else {
+            error_log("Invalid or missing database credentials in .env file.");
+            $db_error = true;
+        }
+    }
+    else {
+        error_log(".env file not found.");
+        $db_error = true;
+    }
 
-            if (!$db_error) {
-                ?>
+    if (!$db_error) {
+?>
 
                 <div class="success-content">
                     <div class="success-icon">
@@ -133,8 +136,9 @@
                 </div>
 
                 <?php
-            } else {
-                echo '<div class="success-content">
+    }
+    else {
+        echo '<div class="success-content">
                         <div class="success-icon" style="background-color: var(--text-main);">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:relative; z-index:2;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                         </div>
@@ -150,9 +154,10 @@
                             <span class="en-content">Go Back</span>
                         </a>
                       </div>';
-            }
-        } else {
-            echo '<div class="success-content">
+    }
+}
+else {
+    echo '<div class="success-content">
                     <div class="success-icon" style="background-color: var(--text-main);">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:relative; z-index:2;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                     </div>
@@ -168,8 +173,8 @@
                         <span class="en-content">Return to Form</span>
                     </a>
                   </div>';
-        }
-        ?>
+}
+?>
     </div>
 
     <a href="https://www.istinye.edu.tr/tr/sks" target="_blank" rel="noopener noreferrer" class="sks-logo-link">
