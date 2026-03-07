@@ -1,16 +1,10 @@
-/* style.css - Creative Volleyball Theme with ISU Colors */
 :root {
-    /* Istinye University Colors */
     --isu-blue: #002d72;
-    /* Corporate Deep Blue */
     --isu-blue-light: #004dbe;
     --isu-red: #e31837;
-    /* Corporate Red */
     --isu-red-light: #ff2b4d;
     --isu-yellow: #ffb81c;
-    /* A sporty yellow accent often used with navy/red */
 
-    /* Neutral Colors for Clean Look */
     --bg-main: #f4f7f6;
     --surface: #ffffff;
     --text-main: #1e293b;
@@ -37,11 +31,9 @@ body {
     line-height: 1.6;
     position: relative;
     overflow-x: hidden;
-    /* High quality dynamic volleyball background */
     background: url('bg.png') center/cover no-repeat fixed;
 }
 
-/* Semi-transparent overlay to ensure text readability over the dynamic background */
 body::before {
     content: '';
     position: fixed;
@@ -58,7 +50,6 @@ body::before {
 
 
 
-/* Clean Side Court Lines */
 .court-line {
     position: fixed;
     height: 100vh;
@@ -75,21 +66,17 @@ body::before {
     right: 5%;
 }
 
-/* Container */
 .container {
     width: 100%;
     max-width: 850px;
     background: var(--surface);
     border-radius: 20px;
     padding: 0;
-    /* Padding moved to inner sections for better header */
     box-shadow: 0 20px 40px rgba(0, 45, 114, 0.08);
     position: relative;
     overflow: hidden;
-    /* For header background clipping */
 }
 
-/* Header */
 header {
     text-align: center;
     padding: 4rem 2rem 3rem;
@@ -99,7 +86,6 @@ header {
     overflow: hidden;
 }
 
-/* Net Graphic inside header */
 header::before {
     content: '';
     position: absolute;
@@ -114,7 +100,6 @@ header::before {
     border-top: 4px solid white;
 }
 
-/* Angled cut at the bottom of header */
 header {
     clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
     margin-bottom: 2rem;
@@ -137,7 +122,6 @@ header {
     font-weight: 800;
     font-size: 1.8rem;
     border-radius: 50%;
-    /* Make it round like a ball */
     border: 4px solid var(--isu-red);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -162,7 +146,6 @@ header p {
     z-index: 2;
 }
 
-/* --- KAYMALI (SLIDER) DİL SEÇİCİ --- */
 .lang-toggle-container {
     display: inline-flex;
     justify-content: center;
@@ -220,7 +203,6 @@ header p {
     user-select: none;
 }
 
-/* Default TR active */
 .tr-label {
     color: var(--isu-blue);
 }
@@ -233,7 +215,6 @@ header p {
     color: var(--isu-blue);
 }
 
-/* Float Switcher for Submit Page */
 .float-switcher {
     background: var(--isu-blue);
     border-color: var(--isu-blue);
@@ -257,7 +238,6 @@ header p {
     color: var(--isu-blue);
 }
 
-/* Form Sections */
 .registration-form {
     padding: 0 3.5rem 3.5rem;
 }
@@ -268,7 +248,6 @@ header p {
     position: relative;
 }
 
-/* Add small decorative numbers for steps */
 .form-section::before {
     content: attr(data-step);
     position: absolute;
@@ -300,7 +279,6 @@ header p {
     gap: 0.75rem;
 }
 
-/* Volleyball icon next to titles */
 .form-section h2::before {
     content: '';
     display: inline-block;
@@ -369,7 +347,6 @@ input:focus {
     transform: translateY(-2px);
 }
 
-/* Player List Styles */
 #players-container-tr,
 #players-container-en {
     display: flex;
@@ -396,7 +373,6 @@ input:focus {
     background: #f8fafc;
 }
 
-/* Shirt numbers for players */
 .player-number {
     display: flex;
     justify-content: center;
@@ -413,7 +389,6 @@ input:focus {
     position: relative;
 }
 
-/* "Jersey" collar effect for the number */
 .player-number::after {
     content: '';
     position: absolute;
@@ -463,7 +438,6 @@ input:focus {
     color: var(--isu-red);
 }
 
-/* Buttons */
 .btn-primary,
 .btn-secondary {
     font-family: inherit;
@@ -481,19 +455,19 @@ input:focus {
 .btn-primary {
     width: 100%;
     padding: 1.25rem;
-    background: #002D72; /* Solid deep ISU blue */
+    background: #002D72;
     color: white;
     border: none;
     font-size: 1.15rem;
     margin-top: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-radius: 50px; /* Fully oval */
-    box-shadow: 0 8px 15px rgba(0, 45, 114, 0.15); /* Soft, subtle shadow */
+    border-radius: 50px;
+    box-shadow: 0 8px 15px rgba(0, 45, 114, 0.15);
 }
 
 .btn-primary:hover {
-    background: #002255; /* Slightly darker on hover */
+    background: #002255;
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 45, 114, 0.25);
 }
@@ -515,7 +489,6 @@ input:focus {
     border-style: solid;
 }
 
-/* Success Page Specific */
 .success-content {
     text-align: center;
     padding: 2rem 3.5rem 4rem;
@@ -535,7 +508,6 @@ input:focus {
     position: relative;
 }
 
-/* Volleyball lines inside success icon */
 .success-icon::before {
     content: '';
     position: absolute;
@@ -578,7 +550,6 @@ input:focus {
     text-align: left;
     margin-bottom: 3rem;
     position: relative;
-    /* Net background for card */
     background-image:
         linear-gradient(45deg, rgba(0, 45, 114, 0.02) 25%, transparent 25%, transparent 75%, rgba(0, 45, 114, 0.02) 75%),
         linear-gradient(45deg, rgba(0, 45, 114, 0.02) 25%, transparent 25%, transparent 75%, rgba(0, 45, 114, 0.02) 75%);
@@ -639,7 +610,6 @@ input:focus {
     box-shadow: 0 8px 20px rgba(0, 45, 114, 0.3);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .container {
         border-radius: 0;
@@ -680,7 +650,6 @@ input:focus {
     }
 }
 
-/* SKS Logo */
 .sks-logo {
     position: fixed;
     bottom: 1.5rem;
@@ -698,15 +667,12 @@ input:focus {
     opacity: 1;
 }
 
-/* --- SEPARATE FORM LANGUAGE TOGGLING --- */
-/* By default, TR is visible, EN is hidden */
 .en-content {
     display: none !important;
 }
 
 .tr-content {
     display: block;
-    /* or appropriate default */
 }
 
 header h1.tr-content,
@@ -714,7 +680,6 @@ header p.tr-content {
     display: block;
 }
 
-/* When body has .lang-en class */
 body.lang-en .tr-content {
     display: none !important;
 }

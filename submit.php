@@ -36,12 +36,12 @@
             $submitted_lang = $_POST['submitted_lang'] ?? 'tr';
 
             $valid_players = array_filter($players, function ($p) {
-                return trim($p) !== ''; });
+                return trim($p) !== '';
+            });
             $player_count = count($valid_players);
-            
+
             $is_en = ($submitted_lang == 'en');
 
-            // Database Connection & Insertion via .env
             $db_error = false;
             $env_file = __DIR__ . '/.env';
             if (file_exists($env_file)) {
@@ -51,7 +51,7 @@
                         $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
                         $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
                         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                        
+
                         $stmt = $pdo->prepare("INSERT INTO registrations (team_name, captain_name, captain_phone, captain_email, players, submitted_lang) VALUES (?, ?, ?, ?, ?, ?)");
                         $players_json = json_encode(array_values($valid_players), JSON_UNESCAPED_UNICODE);
                         $stmt->execute([$team_name, $captain_name, $captain_phone, $captain_email, $players_json, $submitted_lang]);
@@ -69,71 +69,71 @@
             }
 
             if (!$db_error) {
-            ?>
+                ?>
 
-            <div class="success-content">
-                <div class="success-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" style="position:relative; z-index:2;">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
+                <div class="success-content">
+                    <div class="success-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" style="position:relative; z-index:2;">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+
+                    <h1 class="success-title tr-content">Smaç Başarılı! (Kayıt Alındı)</h1>
+                    <h1 class="success-title en-content">Spike Successful! (Registered)</h1>
+
+                    <p class="success-text tr-content">
+                        Sayın <strong><?php echo $captain_name; ?></strong>,
+                        <strong class="highlight"><?php echo $team_name; ?></strong>
+                        takımı adına yaptığınız turnuva başvurusu sistemimize kaydedilmiştir. Sahada görüşmek üzere!
+                    </p>
+                    <p class="success-text en-content">
+                        Dear <strong><?php echo $captain_name; ?></strong>, your tournament application on behalf of the team
+                        <strong class="highlight"><?php echo $team_name; ?></strong> has been recorded in our system. See you on
+                        the court!
+                    </p>
+
+                    <div class="summary-card">
+                        <div class="summary-item">
+                            <span class="summary-label tr-content">Takım Kaptanı</span>
+                            <span class="summary-label en-content">Team Captain</span>
+                            <span class="summary-value"><?php echo $captain_name; ?></span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label tr-content">İletişim Numarası</span>
+                            <span class="summary-label en-content">Contact Number</span>
+                            <span class="summary-value"><?php echo $captain_phone; ?></span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label tr-content">Kurumsal E-posta</span>
+                            <span class="summary-label en-content">Corporate Email</span>
+                            <span class="summary-value"><?php echo $captain_email; ?></span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label tr-content">Kadrodaki Oyuncu Sayısı</span>
+                            <span class="summary-label en-content">Roster Size</span>
+                            <span class="summary-value highlight">
+                                <?php echo $player_count; ?>
+                                <span class="tr-content" style="display:inline;">Kişi</span>
+                                <span class="en-content" style="display:inline;">Players</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <a href="index.php" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        <span class="tr-content">Sahaya Dön (Ana Sayfa)</span>
+                        <span class="en-content">Return to Court (Home Page)</span>
+                    </a>
                 </div>
-                
-                <h1 class="success-title tr-content">Smaç Başarılı! (Kayıt Alındı)</h1>
-                <h1 class="success-title en-content">Spike Successful! (Registered)</h1>
-                
-                <p class="success-text tr-content">
-                    Sayın <strong><?php echo $captain_name; ?></strong>, 
-                    <strong class="highlight"><?php echo $team_name; ?></strong> 
-                    takımı adına yaptığınız turnuva başvurusu sistemimize kaydedilmiştir. Sahada görüşmek üzere!
-                </p>
-                <p class="success-text en-content">
-                    Dear <strong><?php echo $captain_name; ?></strong>, your tournament application on behalf of the team 
-                    <strong class="highlight"><?php echo $team_name; ?></strong> has been recorded in our system. See you on the court!
-                </p>
 
-                <div class="summary-card">
-                    <div class="summary-item">
-                        <span class="summary-label tr-content">Takım Kaptanı</span>
-                        <span class="summary-label en-content">Team Captain</span>
-                        <span class="summary-value"><?php echo $captain_name; ?></span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label tr-content">İletişim Numarası</span>
-                        <span class="summary-label en-content">Contact Number</span>
-                        <span class="summary-value"><?php echo $captain_phone; ?></span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label tr-content">Kurumsal E-posta</span>
-                        <span class="summary-label en-content">Corporate Email</span>
-                        <span class="summary-value"><?php echo $captain_email; ?></span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label tr-content">Kadrodaki Oyuncu Sayısı</span>
-                        <span class="summary-label en-content">Roster Size</span>
-                        <span class="summary-value highlight">
-                            <?php echo $player_count; ?> 
-                            <span class="tr-content" style="display:inline;">Kişi</span>
-                            <span class="en-content" style="display:inline;">Players</span>
-                        </span>
-                    </div>
-                </div>
-
-            <a href="index.php" class="back-link">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    <span class="tr-content">Sahaya Dön (Ana Sayfa)</span>
-                    <span class="en-content">Return to Court (Home Page)</span>
-                </a>
-            </div>
-
-            <?php
+                <?php
             } else {
-                // Database Error Case
                 echo '<div class="success-content">
                         <div class="success-icon" style="background-color: var(--text-main);">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:relative; z-index:2;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
@@ -152,7 +152,6 @@
                       </div>';
             }
         } else {
-            // Not a POST request
             echo '<div class="success-content">
                     <div class="success-icon" style="background-color: var(--text-main);">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:relative; z-index:2;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -173,12 +172,10 @@
         ?>
     </div>
 
-    <!-- SKS Logo at Bottom Right -->
     <a href="https://www.istinye.edu.tr/tr/sks" target="_blank" rel="noopener noreferrer" class="sks-logo-link">
         <img src="isu_sks_logo.png" alt="İSÜ SKS Logo" class="sks-logo">
     </a>
 
-    <!-- Application Script (UI & i18n) -->
     <script src="script.js"></script>
 
 </body>
