@@ -12,8 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isEn) {
             document.body.classList.add('lang-en');
+            // WhatsApp metinlerini İngilizce yap
+            document.querySelectorAll('.fab-whatsapp-tooltip, .mobile-wp-btn span').forEach(el => {
+                el.textContent = 'WhatsApp';
+            });
         } else {
             document.body.classList.remove('lang-en');
+            // WhatsApp metinlerini Türkçe yap
+            document.querySelectorAll('.fab-whatsapp-tooltip').forEach(el => {
+                el.textContent = 'WhatsApp Kanalına Katıl';
+            });
+            document.querySelectorAll('.mobile-wp-btn span').forEach(el => {
+                el.textContent = 'WhatsApp'; // Mobilde zaten WhatsApp demiştik
+            });
         }
 
         if (langCheckbox) langCheckbox.checked = isEn;

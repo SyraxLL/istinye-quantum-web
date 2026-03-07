@@ -79,7 +79,7 @@ body::before {
 
 header {
     text-align: center;
-    padding: 4rem 2rem 3rem;
+    padding: 2rem 2rem 2.5rem;
     background: var(--isu-blue);
     color: white;
     position: relative;
@@ -128,11 +128,49 @@ header {
     z-index: 2;
 }
 
+.header-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.club-logo-header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.club-logo-header img {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
+    margin-left: -5rem;
+}
+
+@media (max-width: 768px) {
+    .header-title-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .club-logo-header img {
+        margin-left: 0;
+        height: 100px;
+    }
+}
+
 .title-dynamic {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
     position: relative;
     z-index: 2;
     line-height: 1.1;
@@ -413,6 +451,12 @@ header {
     color: var(--text-main);
 }
 
+.label-hint {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
 input {
     width: 100%;
     padding: 1rem 1.25rem;
@@ -543,24 +587,73 @@ input:focus {
 }
 
 .btn-primary {
+    position: relative;
     width: 100%;
-    padding: 1.25rem;
-    background: #002D72;
+    padding: 1.1rem 2rem;
+    background: linear-gradient(135deg, #002D72 0%, #004dbe 60%, #0060e6 100%);
     color: white;
     border: none;
-    font-size: 1.15rem;
-    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    margin-top: 1.25rem;
     border-radius: 50px;
-    box-shadow: 0 8px 15px rgba(0, 45, 114, 0.15);
+    box-shadow:
+        0 6px 20px rgba(0, 45, 114, 0.30),
+        0 2px 6px rgba(0, 45, 114, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.3s ease;
+}
+
+
+
+/* subtle top highlight line */
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    width: 80%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .btn-primary:hover {
-    background: #002255;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 45, 114, 0.25);
+    background: linear-gradient(135deg, #0040a8 0%, #0062e0 55%, #0078ff 100%);
+    transform: translateY(-5px) scale(1.01);
+    letter-spacing: 2px;
+    box-shadow:
+        0 18px 40px rgba(0, 77, 190, 0.45),
+        0 6px 14px rgba(0, 45, 114, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
+
+.btn-primary:active {
+    transform: translateY(-2px) scale(0.99);
+    letter-spacing: 1.5px;
+    box-shadow:
+        0 6px 16px rgba(0, 45, 114, 0.30),
+        inset 0 1px 0 rgba(255, 255, 255, 0.10);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+/* animate the arrow SVG inside button */
+.btn-primary svg {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.btn-primary:hover svg {
+    transform: translateX(8px);
+}
+
 
 .btn-secondary {
     padding: 0.85rem 1.5rem;
@@ -751,10 +844,82 @@ input:focus {
         position: static !important;
         /* Remove fixed to stop overlapping */
         display: inline-block !important;
-        width: 549px;
-        /* Bir tık daha büyütüldü (eski değer 220px) */
+        width: 823px;
+        /* 549px'in yaklaşık %50 fazlası */
+        max-width: 90vw;
+        /* Ekrandan tamamen taşmasını engellemek için */
         content: url('sks-logo-renkli.png');
         filter: none;
+    }
+}
+
+/* ── Mobile Sticky WhatsApp Bar ── */
+.mobile-sticky-bar {
+    display: none;
+}
+
+.mobile-wp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.75rem;
+    background: #1a1a1a;
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .mobile-sticky-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 200;
+        padding: 0 1rem;
+        animation: slideUpBar 0.4s ease both;
+    }
+
+    @keyframes slideUpBar {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    .mobile-wp-btn {
+        gap: 0.65rem;
+        padding: 0.9rem 2rem;
+        background: #232323;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(8px);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .mobile-wp-btn:active {
+        transform: scale(0.97);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .mobile-wp-btn svg {
+        color: #25d366;
+        /* WhatsApp yeşili ikon */
+    }
+
+    /* Mobilde normal yuvarlak FAB butonunu gizle */
+    .fab-whatsapp {
+        display: none !important;
     }
 }
 
@@ -774,6 +939,84 @@ input:focus {
     transform: scale(1.05);
     opacity: 1;
 }
+
+/* ── Floating WhatsApp Button ── */
+.fab-whatsapp {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    width: 68px;
+    height: 68px;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
+    z-index: 100;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    text-decoration: none;
+}
+
+.fab-whatsapp::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(37, 211, 102, 0.4);
+    animation: wpPulse 2s ease-out infinite;
+    z-index: -1;
+}
+
+@keyframes wpPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+.fab-whatsapp:hover {
+    transform: scale(1.12);
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.60);
+}
+
+.fab-whatsapp-tooltip {
+    position: absolute;
+    left: calc(100% + 12px);
+    white-space: nowrap;
+    background: #0f0f0f;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateX(-4px);
+}
+
+.fab-whatsapp-tooltip::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-right-color: #0f0f0f;
+}
+
+.fab-whatsapp:hover .fab-whatsapp-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 
 .en-content {
     display: none !important;
@@ -799,4 +1042,236 @@ body.lang-en .en-content {
 body.lang-en header h1.en-content,
 body.lang-en header p.en-content {
     display: block !important;
+}
+
+/* ══════════════════════════════════════
+   RULES SECTION — Premium Design
+══════════════════════════════════════ */
+
+.rules-section {
+    margin-bottom: 2rem;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 20px rgba(0, 45, 114, 0.10),
+        0 1px 4px rgba(0, 45, 114, 0.06);
+    animation: rulesReveal 0.5s ease both;
+}
+
+@keyframes rulesReveal {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Title Bar ── */
+.rules-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.1rem 1.4rem;
+    background: linear-gradient(120deg, var(--isu-blue) 0%, #0047b3 60%, var(--isu-blue-light) 100%);
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.rules-title::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    top: -30px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+}
+
+/* ── Content Wrapper ── */
+.rules-content {
+    padding: 1.2rem 1.25rem 0.5rem;
+    background: #f9fafc;
+    font-size: 0.88rem;
+    color: var(--text-main);
+    line-height: 1.75;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ── Category Cards ── */
+.rules-content h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 0.5rem 0 0;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--isu-blue) 0%, var(--isu-blue-light) 100%);
+}
+
+.rules-content h4:first-child {
+    margin-top: 0;
+}
+
+/* ── List Items ── */
+.rules-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.rules-content ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    background: white;
+    border-left: 3px solid var(--isu-blue);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.rules-content ul li:hover {
+    transform: translateX(4px);
+    box-shadow: 0 3px 10px rgba(0, 45, 114, 0.10);
+    border-color: var(--isu-red);
+}
+
+.rules-content ul li::before {
+    content: '›';
+    color: var(--isu-red);
+    font-weight: 900;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+
+/* ── WhatsApp warning item ── */
+.rules-content ul li:has(strong:only-child),
+.rules-content ul li.whatsapp-warning {
+    background: linear-gradient(90deg, #fff8e7, #fff3cd);
+    border-left: 3px solid #f59e0b;
+    font-weight: 700;
+}
+
+/* ── Consent Checkbox ── */
+.rules-consent {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1.25rem;
+    background: #fafafa;
+    border-top: 1px solid #e8ecf2;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: background 0.2s;
+}
+
+.rules-consent:hover {
+    background: #f3f6fb;
+}
+
+.rules-consent input[type="checkbox"] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    accent-color: var(--isu-blue);
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+}
+
+.rules-consent input[type="checkbox"]:checked {
+    animation: checkPop 0.3s ease;
+}
+
+.rules-consent input[type="checkbox"]:focus {
+    outline: 3px solid rgba(0, 45, 114, 0.3);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+@keyframes checkPop {
+    0% {
+        transform: scale(0.8);
+    }
+
+    60% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ── WhatsApp Link Button ── */
+.rules-content ul li.whatsapp-link-item {
+    background: transparent;
+    border-left: none;
+    box-shadow: none;
+    padding: 0.25rem 0;
+    justify-content: flex-start;
+}
+
+.rules-content ul li.whatsapp-link-item::before {
+    display: none;
+}
+
+.rules-content ul li.whatsapp-link-item:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.whatsapp-btn:hover {
+    background: linear-gradient(135deg, #20c55d 0%, #0e7a6e 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.50);
+    color: white;
+}
+
+.whatsapp-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(37, 211, 102, 0.30);
 }
