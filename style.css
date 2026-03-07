@@ -111,39 +111,129 @@ header {
     z-index: 2;
 }
 
-.logo-placeholder {
+/* Modern & Dynamic Title Styling */
+.badge-season {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 70px;
-    height: 70px;
-    background-color: white;
-    color: var(--isu-blue);
-    font-weight: 800;
-    font-size: 1.8rem;
-    border-radius: 50%;
-    border: 4px solid var(--isu-red);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-header h1 {
-    font-size: 2.8rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 2;
 }
 
-header p {
-    color: #e0e7ff;
-    font-size: 1.15rem;
-    max-width: 600px;
+.title-dynamic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+    line-height: 1.1;
+}
+
+.text-volley {
+    font-size: 4rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    /* 3D and Glow Effect */
+    text-shadow:
+        3px 3px 0px var(--isu-red),
+        -2px -2px 0px var(--isu-blue-light),
+        0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.text-tourney {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--isu-yellow);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-shadow: 2px 2px 0px var(--isu-blue-light);
+}
+
+/* Bouncing Volleyball Icon */
+.volley-icon {
+    display: inline-block;
+    font-size: 2.6rem;
+    animation: smash-bounce 2.5s infinite ease-in-out;
+    transform-origin: center;
+}
+
+@keyframes smash-bounce {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+
+    30% {
+        transform: translateY(-20px) rotate(180deg) scale(1.1);
+    }
+
+    50% {
+        transform: translateY(0) rotate(360deg) scale(0.95);
+    }
+
+    70% {
+        transform: translateY(-10px) rotate(420deg) scale(1.05);
+    }
+
+    100% {
+        transform: translateY(0) rotate(720deg) scale(1);
+    }
+}
+
+/* Styled Description Block */
+.desc-dynamic {
+    color: #ffffff;
+    font-size: 1.2rem;
+    background: rgba(0, 45, 114, 0.5);
+    padding: 1.2rem 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    max-width: 650px;
     margin: 0 auto;
     position: relative;
     z-index: 2;
+    line-height: 1.6;
+}
+
+.highlight-action {
+    color: var(--isu-yellow);
+    font-weight: 800;
+}
+
+@media (max-width: 768px) {
+    .text-volley {
+        font-size: 3rem;
+        letter-spacing: 2px;
+    }
+
+    .text-tourney {
+        font-size: 2.2rem;
+    }
+
+    .volley-icon {
+        font-size: 2.2rem;
+    }
+
+    .desc-dynamic {
+        font-size: 1.05rem;
+        padding: 1rem;
+    }
 }
 
 .lang-toggle-container {
@@ -611,18 +701,22 @@ input:focus {
 }
 
 @media (max-width: 768px) {
-    .container {
-        border-radius: 0;
-        min-height: 100vh;
-        box-shadow: none;
-    }
-
     body {
         padding: 0;
+        display: block;
+        /* Let items stack naturally */
+    }
+
+    .container {
+        border-radius: 0;
+        min-height: calc(100vh - 120px);
+        box-shadow: none;
+        margin-bottom: 0;
     }
 
     header {
-        padding: 3rem 1.5rem 2rem;
+        padding: 3rem 1.5rem 3rem;
+        clip-path: polygon(0 0, 100% 0, 100% 93%, 0 100%);
     }
 
     header h1 {
@@ -631,7 +725,7 @@ input:focus {
 
     .registration-form,
     .success-content {
-        padding: 0 1.5rem 2.5rem;
+        padding: 0 1.5rem 2rem;
     }
 
     .form-row {
@@ -643,10 +737,24 @@ input:focus {
         display: none;
     }
 
+    .sks-logo-link {
+        display: block;
+        text-align: center;
+        padding: 2rem 0 2.5rem;
+        width: 100%;
+        background: var(--surface);
+        /* Renkli logonun görünmesi için beyaz arka plan */
+        border-top: 1px solid var(--border-color);
+    }
+
     .sks-logo {
-        width: 150px;
-        bottom: 1rem;
-        right: 1rem;
+        position: static !important;
+        /* Remove fixed to stop overlapping */
+        display: inline-block !important;
+        width: 549px;
+        /* Bir tık daha büyütüldü (eski değer 220px) */
+        content: url('sks-logo-renkli.png');
+        filter: none;
     }
 }
 

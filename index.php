@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="volleyball-transparent.png">
     <title class="tr-content">İstinye Üniversitesi Voleybol Turnuvası Başvuru Formu</title>
     <title class="en-content" style="display:none;">Istinye University Volleyball Tournament Registration</title>
     <meta name="description"
         content="İstinye Üniversitesi voleybol turnuvası başvuru sayfası. Takımını kur, formunu doldur ve şampiyonluk mücadelesine katıl!">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -19,12 +20,34 @@
 
     <div class="container">
         <header>
-            <h1 class="tr-content">VOLEYBOL TURNUVASI</h1>
-            <h1 class="en-content" style="display:none;">VOLLEYBALL TOURNAMENT</h1>
+            <div class="badge-season tr-content">
+                <span class="badge-icon">🏆</span>
+                <span>İstinye Quantum Dynamics Club</span>
+            </div>
+            <div class="badge-season en-content" style="display:none;">
+                <span class="badge-icon">🏆</span>
+                <span>Istinye Quantum Dynamics Club</span>
+            </div>
 
-            <p class="tr-content">Sahaya çıkmaya hazır mısın? Takımını kur, yeteneğini göster ve kupayı evine götür!</p>
-            <p class="en-content" style="display:none;">Ready to hit the court? Build your team, show your skills, and
-                take the trophy home!</p>
+            <h1 class="tr-content title-dynamic">
+                <span class="text-volley">VOLEYBOL</span>
+                <span class="text-tourney">TURNUVASI <span class="volley-icon">🏐</span></span>
+            </h1>
+            <h1 class="en-content title-dynamic" style="display:none;">
+                <span class="text-volley">VOLLEYBALL</span>
+                <span class="text-tourney">TOURNAMENT <span class="volley-icon">🏐</span></span>
+            </h1>
+
+            <p class="tr-content desc-dynamic">
+                Sahaya çıkmaya hazır mısın? <br>
+                <strong class="highlight-action">Takımını kur</strong>, yeteneğini göster ve <strong
+                    class="highlight-action">kupayı evine götür!</strong>
+            </p>
+            <p class="en-content desc-dynamic" style="display:none;">
+                Ready to hit the court? <br>
+                <strong class="highlight-action">Build your team</strong>, show your skills, and <strong
+                    class="highlight-action">take the trophy home!</strong>
+            </p>
 
             <div class="lang-toggle-container">
                 <label class="lang-switch" for="lang-checkbox">
