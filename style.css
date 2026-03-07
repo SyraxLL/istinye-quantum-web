@@ -1,0 +1,717 @@
+/* style.css - Creative Volleyball Theme with ISU Colors */
+:root {
+    /* Istinye University Colors */
+    --isu-blue: #002d72;
+    /* Corporate Deep Blue */
+    --isu-blue-light: #004dbe;
+    --isu-red: #e31837;
+    /* Corporate Red */
+    --isu-red-light: #ff2b4d;
+    --isu-yellow: #ffb81c;
+    /* A sporty yellow accent often used with navy/red */
+
+    /* Neutral Colors for Clean Look */
+    --bg-main: #f4f7f6;
+    --surface: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --input-bg: #f8fafc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+    line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
+    /* Soft Animated Background Gradient */
+    background: linear-gradient(135deg, #f4f7f6 0%, #e0e7ff 50%, #f4f7f6 100%);
+    background-size: 200% 200%;
+    animation: bgShift 15s ease infinite alternate;
+}
+
+@keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* --- VOLLEYBALL CREATIVE BACKGROUND --- */
+/* Abstract Volleyball Field Elements */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Clean, abstract sports lines */
+    background-image:
+        linear-gradient(135deg, rgba(0, 45, 114, 0.03) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(0, 45, 114, 0.03) 25%, transparent 25%),
+        linear-gradient(45deg, rgba(0, 45, 114, 0.03) 25%, transparent 25%),
+        linear-gradient(315deg, rgba(0, 45, 114, 0.03) 25%, transparent 25%);
+    background-size: 100px 100px;
+    z-index: -3;
+    pointer-events: none;
+}
+
+/* Semi-circle court area */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: -20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120vw;
+    height: 60vh;
+    border-top: 4px solid rgba(227, 24, 55, 0.15);
+    border-radius: 50%;
+    background: radial-gradient(ellipse at top, rgba(0, 45, 114, 0.02) 0%, transparent 70%);
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* Dynamic Action Stripes wrapping the screen */
+.action-stripes {
+    position: fixed;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 100px,
+        rgba(0, 45, 114, 0.015) 100px,
+        rgba(0, 45, 114, 0.015) 200px
+    );
+    z-index: -3;
+    pointer-events: none;
+    animation: moveStripes 60s linear infinite;
+}
+
+@keyframes moveStripes {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(282.8px); }
+}
+
+/* Floating Energy Particles */
+.particles {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -2;
+    pointer-events: none;
+}
+
+.particles::before, .particles::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-shadow: 
+        10vw 20vh 0 rgba(227, 24, 55, 0.5),
+        30vw 50vh 0 rgba(0, 45, 114, 0.5),
+        70vw 15vh 0 rgba(255, 184, 28, 0.6),
+        85vw 70vh 0 rgba(227, 24, 55, 0.4),
+        40vw 80vh 0 rgba(0, 45, 114, 0.5),
+        25vw 35vh 0 rgba(255, 184, 28, 0.5),
+        55vw 55vh 0 rgba(227, 24, 55, 0.6),
+        95vw 40vh 0 rgba(0, 45, 114, 0.4);
+    animation: floatParticles 25s linear infinite;
+}
+
+.particles::after {
+    width: 5px;
+    height: 5px;
+    box-shadow: 
+        15vw 60vh 0 rgba(0, 45, 114, 0.4),
+        50vw 25vh 0 rgba(227, 24, 55, 0.5),
+        80vw 85vh 0 rgba(255, 184, 28, 0.4),
+        5vw 80vh 0 rgba(0, 45, 114, 0.5),
+        65vw 10vh 0 rgba(227, 24, 55, 0.4);
+    animation: floatParticles 35s linear infinite reverse;
+}
+
+@keyframes floatParticles {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translateY(-30vh) scale(1.5); }
+    90% { opacity: 1; }
+    100% { transform: translateY(-70vh) scale(0.8); opacity: 0; }
+}
+
+/* User Provided Volleyball Image styling */
+.bg-volleyball {
+    position: fixed;
+    right: -10vw;
+    bottom: -15vh;
+    top: auto;
+    width: 50vw;
+    max-width: 700px;
+    min-width: 400px;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.9; /* Vibrant presence */
+    animation: floatUserBall 8s infinite ease-in-out alternate;
+}
+
+.user-ball {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(-15px 25px 45px rgba(0, 0, 0, 0.6));
+    animation: spinUserBall 120s linear infinite;
+}
+
+@keyframes floatUserBall {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-40px); }
+}
+
+@keyframes spinUserBall {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+}
+
+/* Clean Side Court Lines */
+.court-line {
+    position: fixed;
+    height: 100vh;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, rgba(227, 24, 55, 0.4), transparent);
+    z-index: -1;
+}
+
+.court-line-left { left: 5%; }
+.court-line-right { right: 5%; }
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 850px;
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 0;
+    /* Padding moved to inner sections for better header */
+    box-shadow: 0 20px 40px rgba(0, 45, 114, 0.08);
+    position: relative;
+    overflow: hidden;
+    /* For header background clipping */
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    background: var(--isu-blue);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Net Graphic inside header */
+header::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-image:
+        linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.2) 55%, transparent 55%),
+        linear-gradient(-45deg, transparent 45%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.2) 55%, transparent 55%);
+    background-size: 15px 15px;
+    border-top: 4px solid white;
+}
+
+/* Angled cut at the bottom of header */
+header {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    margin-bottom: 2rem;
+}
+
+.logo-container {
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.logo-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    background-color: white;
+    color: var(--isu-blue);
+    font-weight: 800;
+    font-size: 1.8rem;
+    border-radius: 50%;
+    /* Make it round like a ball */
+    border: 4px solid var(--isu-red);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+header p {
+    color: #e0e7ff;
+    font-size: 1.15rem;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+/* Form Sections */
+.registration-form {
+    padding: 0 3.5rem 3.5rem;
+}
+
+.form-section {
+    margin-bottom: 3.5rem;
+    background: var(--surface);
+    position: relative;
+}
+
+/* Add small decorative numbers for steps */
+.form-section::before {
+    content: attr(data-step);
+    position: absolute;
+    top: -15px;
+    left: -20px;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(0, 45, 114, 0.05);
+    line-height: 1;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.form-section h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--isu-blue);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Volleyball icon next to titles */
+.form-section h2::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='10' stroke='%23e31837' stroke-width='2'/%3E%3Cpath d='M12 2C12 2 16 6 16 12C16 18 12 22 12 22' stroke='%23e31837' stroke-width='2'/%3E%3Cpath d='M12 2C12 2 8 6 8 12C8 18 12 22 12 22' stroke='%23e31837' stroke-width='2'/%3E%3Cpath d='M2 12H22' stroke='%23e31837' stroke-width='2'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.section-desc {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.form-row {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.form-row .input-group {
+    flex: 1;
+}
+
+.input-group {
+    margin-bottom: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+.input-group label {
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: var(--input-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+input::placeholder {
+    color: #a0aec0;
+}
+
+input:focus {
+    border-color: var(--isu-blue);
+    box-shadow: 0 4px 15px rgba(0, 45, 114, 0.08);
+    background: var(--surface);
+    transform: translateY(-2px);
+}
+
+/* Player List Styles */
+#players-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.player-input-group {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: var(--surface);
+    padding: 0.75rem;
+    border-radius: 12px;
+    border: 1px dashed var(--border-color);
+    transition: all 0.3s;
+}
+
+.player-input-group:focus-within {
+    border: 1px solid var(--isu-blue);
+    background: #f8fafc;
+}
+
+/* Shirt numbers for players */
+.player-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: var(--isu-red);
+    color: white;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 8px rgba(227, 24, 55, 0.3);
+    position: relative;
+}
+
+/* "Jersey" collar effect for the number */
+.player-number::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    width: 20px;
+    height: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 2px solid white;
+    border-top: none;
+    background: var(--isu-red);
+}
+
+.player-input-group input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+    border-radius: 0;
+    margin-bottom: 0;
+    padding: 0.5rem;
+}
+
+.player-input-group input:focus {
+    box-shadow: none;
+    background: transparent;
+    border-bottom-color: var(--isu-blue);
+    transform: none;
+}
+
+.remove-player {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.remove-player:hover {
+    background: #fee2e2;
+    color: var(--isu-red);
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 12px;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 1.25rem;
+    background: var(--isu-blue);
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 20px rgba(0, 45, 114, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Button swoosh effect */
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: skewX(-20deg);
+    transition: 0.5s;
+}
+
+.btn-primary:hover {
+    background: var(--isu-blue-light);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(0, 45, 114, 0.3);
+}
+
+.btn-primary:hover::after {
+    left: 150%;
+}
+
+.btn-secondary {
+    padding: 0.85rem 1.5rem;
+    background: white;
+    color: var(--isu-blue);
+    border: 2px dashed var(--isu-blue);
+    font-size: 1.05rem;
+    width: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-secondary:hover {
+    background: var(--isu-blue);
+    color: white;
+    border-style: solid;
+}
+
+/* Success Page Specific */
+.success-content {
+    text-align: center;
+    padding: 2rem 3.5rem 4rem;
+}
+
+.success-icon {
+    width: 100px;
+    height: 100px;
+    background: var(--isu-red);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 2rem;
+    color: white;
+    box-shadow: 0 10px 25px rgba(227, 24, 55, 0.3);
+    position: relative;
+}
+
+/* Volleyball lines inside success icon */
+.success-icon::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    clip-path: circle(50% at 20% 50%);
+}
+
+.success-icon::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    clip-path: circle(50% at 80% 50%);
+}
+
+.success-title {
+    font-size: 2.4rem;
+    color: var(--isu-blue);
+    margin-bottom: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.success-text {
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+}
+
+.summary-card {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: left;
+    margin-bottom: 3rem;
+    position: relative;
+    /* Net background for card */
+    background-image:
+        linear-gradient(45deg, rgba(0, 45, 114, 0.02) 25%, transparent 25%, transparent 75%, rgba(0, 45, 114, 0.02) 75%),
+        linear-gradient(45deg, rgba(0, 45, 114, 0.02) 25%, transparent 25%, transparent 75%, rgba(0, 45, 114, 0.02) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 1.25rem;
+    font-size: 1.1rem;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.summary-label {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.summary-value {
+    font-weight: 700;
+    color: var(--isu-blue);
+    text-align: right;
+}
+
+.highlight {
+    color: var(--isu-red);
+    font-weight: 800;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    background: var(--isu-blue);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 5px 15px rgba(0, 45, 114, 0.2);
+}
+
+.back-link:hover {
+    background: var(--isu-blue-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 45, 114, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        border-radius: 0;
+        min-height: 100vh;
+        box-shadow: none;
+    }
+
+    body {
+        padding: 0;
+    }
+
+    header {
+        padding: 3rem 1.5rem 2rem;
+    }
+
+    header h1 {
+        font-size: 2.2rem;
+    }
+
+    .registration-form,
+    .success-content {
+        padding: 0 1.5rem 2.5rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form-section::before {
+        display: none;
+    }
+}
