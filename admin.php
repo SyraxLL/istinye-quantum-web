@@ -24,11 +24,15 @@ if (isset($_GET['logout'])) {
 }
 
 $error = '';
+$error_detail = '';
+$error_code = '';
 
 // Brute Force Kontrolü
 $bruteForceStatus = checkBruteForce(5, 3); // 5 hak, 3 dakika bekleme (timeout)
 if ($bruteForceStatus !== true) {
-    $error = $bruteForceStatus;
+    $error = "Hız Sınırı Engeli";
+    $error_detail = $bruteForceStatus; 
+    $error_code = "ERR_BRUTE_FORCE";
 }
 
 // Giriş İşlemi
@@ -36,10 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['password'], $_POST['us
     
     // CSRF Koruması
     if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
-        die("Güvenlik İhlali: CSRF Token geçersiz veya eksik!");
-    }
-
-    if ($bruteForceStatus === true) {
+        $error = "Güvenlik İhlali";
+        $error_detail = "CSRF Token geçersiz veya eksik. Lütfen sayfayı yenileyip tekrar deneyin.";
+        $error_code = "ERR_CSRF_TOKEN";
+    } else {
+        if ($bruteForceStatus === true) {
         $input_user = sanitizeInput($_POST['username']);
         $input_pass = $_POST['password']; // Şifreyi sanitize etmiyoruz çünkü özel karakterler içerebilir ve verify edilecek
         
@@ -57,10 +62,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['password'], $_POST['us
                 
                 if ($admin_record && password_verify($input_pass, $admin_record['password'])) {
                     $login_success = true;
+                } else {
+                    $error_code = "ERR_INVALID_CREDENTIALS";
+                    $error_detail = $admin_record ? "Şifre uyuşmuyor." : "Kullanıcı bulunamadı.";
                 }
             } catch (PDOException $e) {
-                $error = "Veritabanı bağlantı hatası: " . $e->getMessage();
+                $error = "Veritabanı Bağlantı Sorunu";
+                $error_code = "ERR_DB_" . $e->getCode();
+                $error_detail = "Asıl Neden: " . $e->getMessage();
             }
+        } else {
+            $error = "Sistem Yapılandırma Hatası";
+            $error_code = "ERR_CONFIG_MISSING";
+            $error_detail = ".env dosyasında veritabanı bilgileri eksik veya dosya bulunamadı.";
         }
         
         if ($login_success) {
@@ -75,8 +89,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['password'], $_POST['us
         } else {
             if (empty($error)) {
                 recordFailedAttempt(5, 3);
-                $error = 'Hatalı kullanıcı adı veya şifre!';
+                $error = 'Giriş Başarısız!';
+                // Eğer hata kodu set edilmemişse genel bir tane atayalım
+                if (empty($error_code)) $error_code = "ERR_AUTH_FAILED";
+                if (empty($error_detail)) $error_detail = "Kullanıcı adı veya şifre yanlış.";
             }
+        }
         }
     }
 }
@@ -483,13 +501,20 @@ if ($logged_in && $pdo) {
                 <p>Devam etmek için lütfen giriş yapın.</p>
             </div>
 
-            <?php 
-            // Hata ayıklama için:
-            // error_reporting(E_ALL); ini_set('display_errors', 1);
-            if ($error): ?>
-                <div class="error-msg">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                    <?php echo htmlspecialchars($error); ?>
+            <?php if ($error): ?>
+                <div class="error-msg" style="display: block; text-align: left; padding: 1rem;">
+                    <div style="display: flex; align-items: center; margin-bottom: 0.5rem; color: #dc2626; font-weight: 700;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
+                    <?php if ($error_code): ?>
+                        <div style="font-size: 0.75rem; background: #fee2e2; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; color: #991b1b; font-weight: 600;">Kod: <?php echo htmlspecialchars($error_code); ?></div>
+                    <?php endif; ?>
+                    <?php if ($error_detail): ?>
+                        <div style="font-size: 0.85rem; color: #4b5563; border-top: 1px solid #fca5a5; padding-top: 0.5rem; word-break: break-all;">
+                            <strong>Nedeni:</strong> <?php echo htmlspecialchars($error_detail); ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
@@ -1004,7 +1029,7 @@ if ($logged_in && $pdo) {
                     document.getElementById('records').classList.remove('active');
                 <?php endif; ?>
             </script>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 </body>
 </html>
