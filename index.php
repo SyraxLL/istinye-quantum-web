@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/security.php';
+startSecureSession();
+?>
 <!DOCTYPE html>
 <html lang="tr">
 
@@ -56,13 +60,27 @@
             </div>
         </header>
         <form action="submit.php" method="POST" class="registration-form tr-content" id="tournamentFormTR">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generateCsrfToken()); ?>">
             <input type="hidden" name="submitted_lang" value="tr">
 
             <div class="form-section" data-step="01">
-                <h2>Takım Bilgileri</h2>
+                <h2>Başvuru Tipi & Takım Bilgileri</h2>
+                
+                <div class="input-group" style="margin-bottom: 1.5rem;">
+                    <label for="app_type_tr">Başvuru Türü</label>
+                    <select id="app_type_tr" name="app_type" onchange="toggleAppType('tr')" required style="width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1.05rem; background: #f8fafc; color: var(--text-main); appearance: none; cursor: pointer; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23004bb6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right .7em top 50%; background-size: .65em auto;">
+                        <option value="full">Tam Takım Başvurusu (6-10 Kişi)</option>
+                        <option value="incomplete">Eksik Takım / Bireysel Başvuru</option>
+                    </select>
+                </div>
+                
+                <div id="incomplete_warning_tr" style="display: none; background-color: #fef2f2; border-left: 4px solid var(--isu-red); padding: 1rem; margin-bottom: 1.5rem; border-radius: 8px; color: #991b1b; font-size: 0.95rem; font-weight: 500;">
+                    <strong style="color: var(--isu-red);">Bilgilendirme:</strong> Takımınızı tam oluşturmak ve uygun oyuncularla eşleştirmek için ekibimiz sizinle iletişime geçecektir. <em>(Lütfen iletişim bilgilerinizi eksik veya hatalı girmeyiniz.)</em>
+                </div>
+                
                 <div class="input-group">
-                    <label for="team_name_tr">Takım Adı</label>
-                    <input type="text" id="team_name_tr" name="team_name" required placeholder="Örn: İSÜ Smaçörleri">
+                    <label for="team_name_tr">Takım Adı <span id="team_name_hint_tr" style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">(Varsa)</span></label>
+                    <input type="text" id="team_name_tr" name="team_name" placeholder="Örn: İSÜ Smaçörleri">
                 </div>
             </div>
 
@@ -198,13 +216,27 @@
         </form>
         <form action="submit.php" method="POST" class="registration-form en-content" id="tournamentFormEN"
             style="display: none;">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generateCsrfToken()); ?>">
             <input type="hidden" name="submitted_lang" value="en">
 
             <div class="form-section" data-step="01">
-                <h2>Team Details</h2>
+                <h2>Application Type & Team Details</h2>
+                
+                <div class="input-group" style="margin-bottom: 1.5rem;">
+                    <label for="app_type_en">Application Type</label>
+                    <select id="app_type_en" name="app_type" onchange="toggleAppType('en')" required style="width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1.05rem; background: #f8fafc; color: var(--text-main); appearance: none; cursor: pointer; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23004bb6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right .7em top 50%; background-size: .65em auto;">
+                        <option value="full">Full Team Application (6-10 Players)</option>
+                        <option value="incomplete">Incomplete Team / Solo Application</option>
+                    </select>
+                </div>
+
+                <div id="incomplete_warning_en" style="display: none; background-color: #fef2f2; border-left: 4px solid var(--isu-red); padding: 1rem; margin-bottom: 1.5rem; border-radius: 8px; color: #991b1b; font-size: 0.95rem; font-weight: 500;">
+                    <strong style="color: var(--isu-red);">Information:</strong> Our team will contact you to pair you with available players and complete your team. <em>(Please ensure your contact information is complete and accurate.)</em>
+                </div>
+
                 <div class="input-group">
-                    <label for="team_name_en">Team Name</label>
-                    <input type="text" id="team_name_en" name="team_name" required placeholder="E.g. ISU Spikers">
+                    <label for="team_name_en">Team Name <span id="team_name_hint_en" style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">(If any)</span></label>
+                    <input type="text" id="team_name_en" name="team_name" placeholder="E.g. ISU Spikers">
                 </div>
             </div>
 
@@ -370,7 +402,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
 
-
             function setupDynamicPlayers(containerId, btnId, isEn) {
                 const playersContainer = document.getElementById(containerId);
                 const addPlayerBtn = document.getElementById(btnId);
@@ -379,6 +410,33 @@
                 if (!playersContainer || !addPlayerBtn) return;
 
                 addPlayerBtn.addEventListener('click', () => {
+                    // Find the first hidden default player group, if any
+                    let hiddenDefaultGroup = null;
+                    const defaultGroups = playersContainer.children;
+                    
+                    for (let i = 0; i < defaultGroups.length; i++) {
+                        const group = defaultGroups[i];
+                        if (group.style.display === 'none' && !group.querySelector('.remove-player')) {
+                            hiddenDefaultGroup = group;
+                            break;
+                        }
+                    }
+
+                    if (hiddenDefaultGroup) {
+                        // Reshow a default group that was hidden due to "Incomplete" selection
+                        hiddenDefaultGroup.style.display = 'flex';
+                        const input = hiddenDefaultGroup.querySelector('input');
+                        const appTypeObj = document.getElementById(isEn ? 'app_type_en' : 'app_type_tr');
+                        if (appTypeObj && appTypeObj.value === 'incomplete') {
+                            input.required = false;
+                        } else {
+                            input.required = true;
+                        }
+                        updateButtonText(playersContainer, addPlayerBtn, isEn);
+                        return;
+                    }
+
+
                     const currentPlayerCount = playersContainer.querySelectorAll('.player-input-group').length;
 
                     if (currentPlayerCount < maxPlayers) {
@@ -395,7 +453,7 @@
 
                         newGroup.innerHTML = `
                             <span class="player-number">${playerIndex}</span>
-                            <input type="text" id="player_${idPrefix}${playerIndex}" name="players[]" placeholder="${placeholderText}" required>
+                            <input type="text" id="player_${idPrefix}${playerIndex}" name="players[]" placeholder="${placeholderText}">
                             <button type="button" class="remove-player" title="${titleText}">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                             </button>
@@ -407,23 +465,38 @@
                             newGroup.remove();
                             updatePlayerNumbers();
                             addPlayerBtn.style.display = 'flex';
+                            updateButtonText(playersContainer, addPlayerBtn, isEn);
                         });
 
                         if (currentPlayerCount + 1 >= maxPlayers) {
                             addPlayerBtn.style.display = 'none';
                         }
+                        
+                        // If app_type is 'incomplete', ensure new player fields are not required
+                        const appTypeObj = document.getElementById(isEn ? 'app_type_en' : 'app_type_tr');
+                        if (appTypeObj && appTypeObj.value === 'incomplete') {
+                            newGroup.querySelector('input').required = false;
+                        }
+                        
+                        updateButtonText(playersContainer, addPlayerBtn, isEn);
                     }
                 });
 
                 function updatePlayerNumbers() {
+                    let visibleIndex = 1;
                     const playerGroups = playersContainer.querySelectorAll('.player-input-group');
                     playerGroups.forEach((group, index) => {
-                        const num = index + 1;
+                        if (group.style.display === 'none') {
+                            // If it's a hidden default field, just clear its value
+                            const input = group.querySelector('input');
+                            if (input) input.value = '';
+                            return;
+                        }
+                        
+                        const num = visibleIndex;
                         group.querySelector('.player-number').textContent = num;
                         const input = group.querySelector('input');
-                        const idPrefix = isEn ? 'en_' : 'tr_';
-                        input.id = 'player_' + idPrefix + num;
-
+                        
                         if (num <= 6) {
                             input.placeholder = isEn
                                 ? num + '. Player Name (Starter)'
@@ -433,12 +506,96 @@
                                 ? num + '. Player Name (Substitute)'
                                 : num + '. Oyuncu Adı Soyadı (Yedek)';
                         }
+                        visibleIndex++;
                     });
                 }
             }
 
             setupDynamicPlayers('players-container-tr', 'add-player-btn-tr', false);
             setupDynamicPlayers('players-container-en', 'add-player-btn-en', true);
+            
+            // Initialization
+            window.toggleAppType = function(langPrefix) {
+                const selectEl = document.getElementById('app_type_' + langPrefix);
+                const isFull = selectEl.value === 'full';
+                const teamNameHint = document.getElementById('team_name_hint_' + langPrefix);
+                const warningMsg = document.getElementById('incomplete_warning_' + langPrefix);
+                const playersContainer = document.getElementById('players-container-' + langPrefix);
+                
+                if (teamNameHint) {
+                    teamNameHint.style.display = isFull ? 'none' : 'inline';
+                }
+                
+                if (warningMsg) {
+                    warningMsg.style.display = isFull ? 'none' : 'block';
+                }
+                
+                const teamNameInput = document.getElementById('team_name_' + langPrefix);
+                teamNameInput.required = isFull;
+                
+                // For Incomplete Teams, initially hide players 2-6 and make them not required
+                // For Full Teams, show them and make them required
+                for (let i = 2; i <= 6; i++) {
+                    const playerGroup = playersContainer.children[i-1];
+                    const playerInput = document.getElementById('player_' + langPrefix + '_' + i);
+                    
+                    if (playerGroup && playerInput) {
+                        if (isFull) {
+                            playerGroup.style.display = 'flex';
+                            playerInput.required = true;
+                        } else {
+                            // If it's incomplete, we want to start with just 1 player field.
+                            // Only hide if it's the default fields (no remove button). 
+                            // If they added it manually, keep it visible.
+                            if (!playerGroup.querySelector('.remove-player')) {
+                                playerGroup.style.display = 'none';
+                                playerInput.value = ''; // clear value if it was hidden
+                            }
+                            playerInput.required = false;
+                        }
+                    }
+                }
+                
+                // First player (applicant) should always be required and visible
+                const firstPlayer = document.getElementById('player_' + langPrefix + '_1');
+                if (firstPlayer) {
+                    firstPlayer.required = true;
+                    firstPlayer.closest('.player-input-group').style.display = 'flex';
+                }
+                
+                // Trigger button text update
+                const btnId = 'add-player-btn-' + langPrefix;
+                const isEn = langPrefix === 'en';
+                updateButtonText(playersContainer, document.getElementById(btnId), isEn);
+            };
+            
+            function updateButtonText(container, btn, isEn) {
+                if (!container || !btn) return;
+                
+                // Count visible player groups
+                let visibleCount = 0;
+                container.querySelectorAll('.player-input-group').forEach(group => {
+                    if (group.style.display !== 'none') visibleCount++;
+                });
+
+                const btnTextSpan = btn.querySelector('span');
+                if (btnTextSpan) {
+                    if (visibleCount < 6) {
+                        btnTextSpan.textContent = isEn ? 'Add Player' : 'Oyuncu Ekle';
+                    } else {
+                        btnTextSpan.textContent = isEn ? 'Add Substitute' : 'Yedek Oyuncu Ekle';
+                    }
+                }
+                
+                // Also update placeholders just in case
+                container.querySelectorAll('.player-input-group').forEach((group, index) => {
+                     if (group.style.display === 'none') return;
+                     const num = index + 1; // Need a better way to re-index visible fields
+                });
+            }
+            
+            toggleAppType('tr');
+            toggleAppType('en');
         });
     </script>
 </body>

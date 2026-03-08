@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/security.php';
+startSecureSession();
+?>
 <!DOCTYPE html>
 <html lang="tr">
 
@@ -26,18 +30,41 @@
             </label>
         </div>
 
-        <?php
+<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $team_name = htmlspecialchars($_POST['team_name'] ?? '');
-    $captain_name = htmlspecialchars($_POST['captain_name'] ?? '');
-    $captain_email = htmlspecialchars($_POST['captain_email'] ?? '');
-    $captain_phone = htmlspecialchars($_POST['captain_phone'] ?? '');
-    $players = $_POST['players'] ?? [];
-    $submitted_lang = $_POST['submitted_lang'] ?? 'tr';
+    // 1. CSRF Verification
+    if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
+        die("Güvenlik İhlali: CSRF Token geçersiz veya eksik!");
+    }
 
-    $valid_players = array_filter($players, function ($p) {
-        return trim($p) !== '';
-    });
+    // 2. Rate Limiting (Spam Koruması: Dakikada en fazla 5 başvuru)
+    if (!checkRateLimit('registration_rate', 5, 60)) {
+        die("Hatalı İstek: Çok fazla başvuru denemesi yaptınız. Lütfen bir süre bekleyip tekrar deneyin.");
+    }
+
+    $app_type = sanitizeInput($_POST['app_type'] ?? 'full');
+    $team_name = sanitizeInput($_POST['team_name'] ?? '');
+    
+    // If it's an incomplete/solo application and they didn't provide a team name, set a placeholder.
+    if ($app_type === 'incomplete' && empty(trim($team_name))) {
+        $team_name = 'Bireysel/Eksik Başvuru';
+    }
+    
+    $captain_name = sanitizeInput($_POST['captain_name'] ?? '');
+    $captain_email = filter_var($_POST['captain_email'] ?? '', FILTER_SANITIZE_EMAIL);
+    $captain_phone = sanitizeInput($_POST['captain_phone'] ?? '');
+    $players = $_POST['players'] ?? [];
+    $submitted_lang = sanitizeInput($_POST['submitted_lang'] ?? 'tr');
+
+    $valid_players = [];
+    if (is_array($players)) {
+        foreach ($players as $p) {
+            $p_clean = sanitizeInput(trim($p));
+            if ($p_clean !== '') {
+                $valid_players[] = $p_clean;
+            }
+        }
+    }
     $player_count = count($valid_players);
 
     $is_en = ($submitted_lang == 'en');
@@ -52,9 +79,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+                // We are storing 'app_type' in the 'team_name' dynamically or we can just append it for clarity in admin panel.
+                // Since there is no app_type column, I will append the tag to the team name to make it visible in the admin panel.
+                $final_team_name = $team_name;
+                if ($app_type === 'incomplete') {
+                    $final_team_name = $team_name === 'Bireysel/Eksik Başvuru' ? $team_name : $team_name . ' (Eksik Kadro)';
+                }
+
                 $stmt = $pdo->prepare("INSERT INTO registrations (team_name, captain_name, captain_phone, captain_email, players, submitted_lang) VALUES (?, ?, ?, ?, ?, ?)");
                 $players_json = json_encode(array_values($valid_players), JSON_UNESCAPED_UNICODE);
-                $stmt->execute([$team_name, $captain_name, $captain_phone, $captain_email, $players_json, $submitted_lang]);
+                $stmt->execute([$final_team_name, $captain_name, $captain_phone, $captain_email, $players_json, $submitted_lang]);
+
+                // 3. E-posta Bildirimi Gönder
+                $to = "6002mustafaadsan@gmail.com";
+                $subject = "Yeni Turnuva Başvurusu: " . $final_team_name;
+                $email_body = "Sisteme yeni bir turnuva başvurusu düştü.\n\n";
+                $email_body .= "Takım Adı: " . $final_team_name . "\n";
+                $email_body .= "Kaptan: " . $captain_name . "\n";
+                $email_body .= "E-posta: " . $captain_email . "\n";
+                $email_body .= "Telefon: " . $captain_phone . "\n";
+                $email_body .= "Oyuncu Sayısı: " . $player_count . "\n";
+                $email_body .= "Başvuru Dili: " . strtoupper($submitted_lang) . "\n";
+                $email_body .= "\nDetaylar için yönetici paneline giriş yapabilirsiniz.";
+
+                $headers = "From: adminpanel@istinyequantum.com\r\n";
+                $headers .= "Reply-To: " . $captain_email . "\r\n";
+                $headers .= "Content-Type: text/plain; charset=utf-8\r\n";
+                $headers .= "X-Mailer: PHP/" . phpversion();
+
+                // Hata oluşsa bile kullanıcıya yansıtmamak için @ kullanıyoruz
+                @mail($to, $subject, $email_body, $headers);
             }
             catch (PDOException $e) {
                 error_log("Database error: " . $e->getMessage());
@@ -109,8 +163,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <span class="summary-value"><?php echo $captain_phone; ?></span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label tr-content">Kurumsal E-posta</span>
-                            <span class="summary-label en-content">Corporate Email</span>
+                            <span class="summary-label tr-content">Öğrenci E-posta</span>
+                            <span class="summary-label en-content">Student Email</span>
                             <span class="summary-value"><?php echo $captain_email; ?></span>
                         </div>
                         <div class="summary-item">
