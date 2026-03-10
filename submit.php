@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute([$final_team_name, $captain_name, $captain_phone, $captain_email, $players_json, $submitted_lang]);
 
                 // 3. E-posta Bildirimi Gönder (Gelişmiş HTML Tasarımı)
-                $to = "6002mustafaadsan@gmail.com";
+                $to = "6002mustafaadsan@gmail.com, hasandag739@gmail.com";
                 $subject = "🏐 Yeni Başvuru: " . $final_team_name;
 
                 // Kadro Ayrımı (Mail için)
