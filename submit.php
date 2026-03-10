@@ -137,6 +137,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Sayın <strong><?php echo $captain_name; ?></strong>,
                         <strong class="highlight"><?php echo $team_name; ?></strong>
                         takımı adına yaptığınız turnuva başvurusu sistemimize kaydedilmiştir. Sahada görüşmek üzere!
+                    <p class="success-text tr-content">
+                        Sayın <strong><?php echo $captain_name; ?></strong>,
+                        <strong class="highlight"><?php echo $team_name; ?></strong>
+                        takımı adına yaptığınız turnuva başvurusu sistemimize kaydedilmiştir. Sahada görüşmek üzere!
                     </p>
                     <p class="success-text en-content">
                         Dear <strong><?php echo $captain_name; ?></strong>, your tournament application on behalf of the team
@@ -169,7 +173,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="en-content" style="display:inline;">Players</span>
                             </span>
                         </div>
+                        <div class="summary-item" style="flex-direction: column; align-items: flex-start; gap: 0.8rem; border-bottom: none; background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+                            <span class="summary-label tr-content" style="margin-bottom: 0;">Kadro Detayları</span>
+                            <span class="summary-label en-content" style="margin-bottom: 0;">Roster Details</span>
+                            
+                            <div style="width: 100%;">
+                                <strong style="font-size: 0.8rem; color: #0056b3;" class="tr-content">Asil Kadro (İlk 6):</strong>
+                                <strong style="font-size: 0.8rem; color: #0056b3;" class="en-content">Starting Lineup (First 6):</strong>
+                                <div style="font-size: 0.95rem; color: #004085; font-weight: 800; margin-bottom: 0.5rem;">
+                                    <?php echo implode(", ", array_slice($valid_players, 0, 6)); ?>
+                                </div>
+                                
+                                <?php if (count($valid_players) > 6): ?>
+                                    <strong style="font-size: 0.8rem; color: #d35400;" class="tr-content">Yedekler:</strong>
+                                    <strong style="font-size: 0.8rem; color: #d35400;" class="en-content">Substitutes:</strong>
+                                    <div style="font-size: 0.9rem; color: #e67e22; font-weight: 600;">
+                                        <?php echo implode(", ", array_slice($valid_players, 6)); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="support-box" style="background: rgba(37, 211, 102, 0.1); border: 2px dashed #25D366; border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0; text-align: center;">
+                        <p style="margin: 0; color: #075E54; font-weight: 700; font-size: 0.95rem;" class="tr-content">
+                            Destek veya Hatalı Başvuru Bildirimi
+                        </p>
+                        <p style="margin: 0; color: #075E54; font-weight: 700; font-size: 0.95rem;" class="en-content">
+                            Support or Report Mistake
+                        </p>
+                        <a href="https://wa.me/905322634401" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #25D366; color: white; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; margin-top: 0.75rem; font-weight: 800; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); transition: transform 0.2s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-2.202 0-3.991 1.789-3.991 3.991 0 .616.141 1.2.391 1.724l-.45 1.644 1.688-.443c.504.225 1.063.353 1.653.353 2.202 0 3.991-1.789 3.991-3.991 0-2.202-1.789-3.991-3.991-3.991zm2.345 5.613c-.131.371-.659.593-1.03.522-.37-.07-.723-.27-1.15-.558-.426-.288-.857-.665-1.127-1.036-.27-.371-.439-.8-.439-1.21 0-.411.17-.834.502-1.11.331-.276.711-.314.937-.314.226 0 .43.003.518.006.088.003.174.008.261.077.087.069.305.741.332.796.026.055.044.119.001.205-.043.086-.108.181-.191.277-.084.096-.174.201-.074.372.1.171.442.723.948 1.171.506.448 1.05.623 1.221.723.171.1.27.084.37-.015.1-.1.439-.516.554-.693.116-.176.23-.146.388-.087.158.059 1.01.476 1.184.563.175.087.291.13.334.205.043.076.043.438-.088.809zM12 2C6.477 2 2 6.477 2 12c0 1.892.524 3.662 1.435 5.176L2 22l4.958-1.413A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                            WhatsApp Destek
+                        </a>
+                    </div>
+
 
                     <a href="index.php" class="back-link">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

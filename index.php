@@ -154,6 +154,14 @@ startSecureSession();
                     </svg>
                     <span>Yedek Oyuncu Ekle</span>
                 </button>
+
+                <div class="inline-support-tr" style="margin-top: 1.5rem; padding: 1rem; background: #f0fdf4; border-radius: 12px; border: 1px solid #bef264; display: flex; align-items: center; justify-content: center; gap: 0.8rem;">
+                    <span style="font-size: 0.85rem; color: #166534; font-weight: 500;">Başvuruyla ilgili bir sorun mu var?</span>
+                    <a href="https://wa.me/905322634401" target="_blank" style="background: #25D366; color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-2.202 0-3.991 1.789-3.991 3.991 0 .616.141 1.2.391 1.724l-.45 1.644 1.688-.443c.504.225 1.063.353 1.653.353 2.202 0 3.991-1.789 3.991-3.991 0-2.202-1.789-3.991-3.991-3.991zm2.345 5.613c-.131.371-.659.593-1.03.522-.37-.07-.723-.27-1.15-.558-.426-.288-.857-.665-1.127-1.036-.27-.371-.439-.8-.439-1.21 0-.411.17-.834.502-1.11.331-.276.711-.314.937-.314.226 0 .43.003.518.006.088.003.174.008.261.077.087.069.305.741.332.796.026.055.044.119.001.205-.043.086-.108.181-.191.277-.084.096-.174.201-.074.372.1.171.442.723.948 1.171.506.448 1.05.623 1.221.723.171.1.27.084.37-.015.1-.1.439-.516.554-.693.116-.176.23-.146.388-.087.158.059 1.01.476 1.184.563.175.087.291.13.334.205.043.076.043.438-.088.809zM12 2C6.477 2 2 6.477 2 12c0 1.892.524 3.662 1.435 5.176L2 22l4.958-1.413A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                        WhatsApp Destek
+                    </a>
+                </div>
             </div>
 
             <div class="rules-section">
@@ -162,8 +170,8 @@ startSecureSession();
                     <h4>Takım Yapısı ve Başvuru Esasları</h4>
                     <ul>
                         <li><strong>Katılım Şartı:</strong> Turnuvaya sadece İstinye Üniversitesi öğrencileri katılabilir.</li>
-                        <li><strong>Başvuru:</strong> Başvurular kişisel değil, belirlenen bir Takım İsmi ile yapılmalıdır.</li>
-                        <li><strong>Kadro:</strong> Takımlar en az 6, en fazla 10 oyuncudan oluşmalıdır. Sahada maç 6 kişilik takımlar halinde oynanır.</li>
+                        <li><strong>Başvuru:</strong> Takımınız varsa bir Takım İsmi ile, yoksa "Bireysel" veya "Eksik Takım" olarak başvuruda bulunabilirsiniz.</li>
+                        <li><strong>Kadro:</strong> Tam takımlar en az 6, en fazla 10 oyuncudan oluşmalıdır. Bireysel başvurular, ekibimiz tarafından uygun takımlara yerleştirilecektir.</li>
                         <li><strong>Cinsiyet:</strong> Her takımın kadrosunda en az 2 kadın oyuncu bulunması zorunludur; sahada her an en az 2 kadın oyuncu aktif oynamak zorundadır. Kadın oyuncu yerine erkek oyuncu girerek sayının 1'e düşmesi kural ihlalidir.</li>
                         <li class="whatsapp-warning"><strong>⚠️ TÜM DUYURULAR WHATSAPP KANALDA YAPILACAĞINDAN DOLAYI KANALA KATILMAK ÇOK ÖNEMLİDİR.</strong></li>
                         <li class="whatsapp-link-item"><a href="https://chat.whatsapp.com/F1qZB7Tya5cKsrYvxG93gc" target="_blank" rel="noopener noreferrer" class="whatsapp-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp Kanalına Katıl</a></li>
@@ -214,6 +222,7 @@ startSecureSession();
             </button>
 
         </form>
+
         <form action="submit.php" method="POST" class="registration-form en-content" id="tournamentFormEN"
             style="display: none;">
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generateCsrfToken()); ?>">
@@ -309,6 +318,14 @@ startSecureSession();
                     </svg>
                     <span>Add Substitute</span>
                 </button>
+
+                <div class="inline-support-en" style="margin-top: 1.5rem; padding: 1rem; background: #f0fdf4; border-radius: 12px; border: 1px solid #bef264; display: flex; align-items: center; justify-content: center; gap: 0.8rem;">
+                    <span style="font-size: 0.85rem; color: #166534; font-weight: 500;">Having issues with the application?</span>
+                    <a href="https://wa.me/905322634401" target="_blank" style="background: #25D366; color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-2.202 0-3.991 1.789-3.991 3.991 0 .616.141 1.2.391 1.724l-.45 1.644 1.688-.443c.504.225 1.063.353 1.653.353 2.202 0 3.991-1.789 3.991-3.991 0-2.202-1.789-3.991-3.991-3.991zm2.345 5.613c-.131.371-.659.593-1.03.522-.37-.07-.723-.27-1.15-.558-.426-.288-.857-.665-1.127-1.036-.27-.371-.439-.8-.439-1.21 0-.411.17-.834.502-1.11.331-.276.711-.314.937-.314.226 0 .43.003.518.006.088.003.174.008.261.077.087.069.305.741.332.796.026.055.044.119.001.205-.043.086-.108.181-.191.277-.084.096-.174.201-.074.372.1.171.442.723.948 1.171.506.448 1.05.623 1.221.723.171.1.27.084.37-.015.1-.1.439-.516.554-.693.116-.176.23-.146.388-.087.158.059 1.01.476 1.184.563.175.087.291.13.334.205.043.076.043.438-.088.809zM12 2C6.477 2 2 6.477 2 12c0 1.892.524 3.662 1.435 5.176L2 22l4.958-1.413A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                        WhatsApp Support
+                    </a>
+                </div>
             </div>
 
             <div class="rules-section">
@@ -317,8 +334,8 @@ startSecureSession();
                     <h4>Team Structure and Registration Rules</h4>
                     <ul>
                         <li><strong>Eligibility:</strong> Only Istinye University students may participate.</li>
-                        <li><strong>Registration:</strong> Applications must be submitted under a Team Name, not individually.</li>
-                        <li><strong>Roster:</strong> Teams must have a minimum of 6 and a maximum of 10 players. Matches are played 6-a-side.</li>
+                        <li><strong>Registration:</strong> You can apply with a Team Name if you have one, or as "Individual" or "Incomplete Team" if you don't.</li>
+                        <li><strong>Roster:</strong> Full teams must have 6 to 10 players. Individual applicants will be placed into suitable teams by our staff.</li>
                         <li><strong>Gender:</strong> Each roster must include at least 2 female players; at all times at least 2 female players must be active on court. Replacing a female player with a male player reducing the count to 1 is a rule violation.</li>
                         <li class="whatsapp-warning"><strong>⚠️ ALL ANNOUNCEMENTS WILL BE MADE ON THE WHATSAPP CHANNEL — JOINING IS ESSENTIAL.</strong></li>
                         <li class="whatsapp-link-item"><a href="https://chat.whatsapp.com/F1qZB7Tya5cKsrYvxG93gc" target="_blank" rel="noopener noreferrer" class="whatsapp-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Join WhatsApp Channel</a></li>
