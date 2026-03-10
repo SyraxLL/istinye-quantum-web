@@ -67,17 +67,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $player_count = count($valid_players);
 
-    $is_en = ($submitted_lang == 'en');
-
     $db_error = false;
     $env_file = __DIR__ . '/.env';
-    if (file_exists($env_file)) {
-        $env = parse_ini_file($env_file);
-        if ($env !== false && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
-            try {
-                $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
-                $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $env = loadEnv($env_file);
+    if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
+        try {
+            $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
+            $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                 // We are storing 'app_type' in the 'team_name' dynamically or we can just append it for clarity in admin panel.
                 // Since there is no app_type column, I will append the tag to the team name to make it visible in the admin panel.
@@ -109,21 +106,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Hata oluşsa bile kullanıcıya yansıtmamak için @ kullanıyoruz
                 @mail($to, $subject, $email_body, $headers);
-            }
-            catch (PDOException $e) {
-                error_log("Database error: " . $e->getMessage());
-                $db_error = true;
-            }
         }
-        else {
-            error_log("Invalid or missing database credentials in .env file.");
+        catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
             $db_error = true;
         }
-    }
-    else {
-        error_log(".env file not found.");
+    } else {
+        error_log("Invalid or missing database credentials in .env file.");
         $db_error = true;
     }
+
+
 
     if (!$db_error) {
 ?>

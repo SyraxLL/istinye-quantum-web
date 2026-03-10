@@ -181,4 +181,30 @@ function checkRateLimit($limitTokenName, $maxRequests = 3, $windowSeconds = 60)
     $_SESSION[$limitTokenName] = $validRequests;
     return true; // İşleme devam
 }
+
+/**
+ * 7. ROBUST .ENV LOADER
+ * -------------------------------------------------------------------
+ * .env dosyasını satır satır okur ve özel karakterlerle (örn: #)
+ * başa çıkabilen bir dizi döndürür.
+ */
+function loadEnv($path)
+{
+    if (!file_exists($path)) {
+        return false;
+    }
+
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $env = [];
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0) continue;
+
+        if (strpos($line, '=') !== false) {
+            list($name, $value) = explode('=', $line, 2);
+            $env[trim($name)] = trim($value, " \t\n\r\0\x0B\"");
+        }
+    }
+    return $env;
+}
 ?>

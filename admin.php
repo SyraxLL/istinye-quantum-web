@@ -3,9 +3,7 @@ require_once __DIR__ . '/security.php';
 startSecureSession();
 
 $env_file = __DIR__ . '/.env';
-if (file_exists($env_file)) {
-    $env = parse_ini_file($env_file);
-}
+$env = loadEnv($env_file);
 
 // Çıkış İşlemi
 if (isset($_GET['logout'])) {
@@ -42,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['password'], $_POST['us
         
         // Veritabanından Kullanıcıyı Kontrol Et
         $login_success = false;
-        if (file_exists($env_file) && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
+        if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
             try {
                 $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
                 $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
@@ -99,7 +97,7 @@ $action_err = '';
 
 // Veritabanı Bağlantısı (Genel Kullanım İçin)
 $pdo = null;
-if ($logged_in && file_exists($env_file) && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
+if ($logged_in && $env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
     try {
         $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
         $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
