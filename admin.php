@@ -3,16 +3,8 @@ require_once __DIR__ . '/security.php';
 startSecureSession();
 
 $env_file = __DIR__ . '/.env';
-$admin_username = 'admin'; // varsayılan
-$admin_password = 'admin'; // varsayılan
 if (file_exists($env_file)) {
     $env = parse_ini_file($env_file);
-    if (isset($env['ADMIN_USER'])) {
-        $admin_username = $env['ADMIN_USER'];
-    }
-    if (isset($env['ADMIN_PASS'])) {
-        $admin_password = $env['ADMIN_PASS'];
-    }
 }
 
 // Çıkış İşlemi
