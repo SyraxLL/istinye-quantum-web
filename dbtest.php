@@ -1,15 +1,24 @@
 <?php
 
-$host = getenv('DB_HOST');
-$dbname = getenv('DB_DATABASE');
-$user = getenv('DB_USERNAME');
-$pass = getenv('DB_PASSWORD');
-$port = getenv('DB_PORT') ?: 3306;
+$env_file = __DIR__ . '/.env';
+if (file_exists($env_file)) {
+    $env = parse_ini_file($env_file);
+    
+    $host = $env['DB_HOST'] ?? 'localhost';
+    $dbname = $env['DB_NAME'] ?? '';
+    $user = $env['DB_USER'] ?? '';
+    $pass = $env['DB_PASS'] ?? '';
+    $port = 3306; // Varsayılan port
 
-try {
-    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $user, $pass);
-    echo "Baglanti basarili";
-}
-catch (PDOException $e) {
-    echo "Hata: " . $e->getMessage();
-}
+    try {
+        $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+        $pdo = new PDO($dsn, $user, $pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        echo "Baglanti basarili!";
+    }
+    catch (PDOException $e) {
+        echo "Hata: " . $e->getMessage();
+    }
+} else {
+    echo ".env dosyasi bulunamadi!";
+}
