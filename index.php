@@ -69,7 +69,7 @@ startSecureSession();
                 <div class="input-group" style="margin-bottom: 1.5rem;">
                     <label for="app_type_tr">Başvuru Türü</label>
                     <select id="app_type_tr" name="app_type" onchange="toggleAppType('tr')" required style="width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1.05rem; background: #f8fafc; color: var(--text-main); appearance: none; cursor: pointer; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23004bb6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right .7em top 50%; background-size: .65em auto;">
-                        <option value="full">Tam Takım Başvurusu (6-10 Kişi)</option>
+                        <option value="full">Tam Takım Başvurusu (7-12 Kişi)</option>
                         <option value="incomplete">Eksik Takım / Bireysel Başvuru</option>
                     </select>
                 </div>
@@ -109,7 +109,7 @@ startSecureSession();
                 <div class="section-header">
                     <h2>Oyuncu Kadrosu</h2>
                 </div>
-                <p class="section-desc">Sahaya çıkacak 6 asil oyuncu ve yedek kadronuzu belirleyin (Toplam maks. 10
+                <p class="section-desc">Sahaya çıkacak 6 asil oyuncu ve yedek kadronuzu belirleyin (Toplam maks. 12
                     kişi).</p>
 
                 <div id="players-container-tr">
@@ -143,6 +143,11 @@ startSecureSession();
                         <input type="text" id="player_tr_6" name="players[]" placeholder="6. Oyuncu Adı Soyadı (Asil)"
                             required>
                     </div>
+                    <div class="player-input-group">
+                        <span class="player-number">7</span>
+                        <input type="text" id="player_tr_7" name="players[]" placeholder="7. Oyuncu Adı Soyadı (Yedek)"
+                            required>
+                    </div>
                 </div>
 
                 <button type="button" id="add-player-btn-tr" class="btn-secondary">
@@ -171,7 +176,7 @@ startSecureSession();
                     <ul>
                         <li><strong>Katılım Şartı:</strong> Turnuvaya sadece İstinye Üniversitesi öğrencileri katılabilir.</li>
                         <li><strong>Başvuru:</strong> Takımınız varsa bir Takım İsmi ile, yoksa "Bireysel" veya "Eksik Takım" olarak başvuruda bulunabilirsiniz.</li>
-                        <li><strong>Kadro:</strong> Tam takımlar en az 6, en fazla 10 oyuncudan oluşmalıdır. Bireysel başvurular, ekibimiz tarafından uygun takımlara yerleştirilecektir.</li>
+                        <li><strong>Kadro:</strong> Tam takımlar en az 7, en fazla 12 oyuncudan oluşmalıdır. Bireysel başvurular, ekibimiz tarafından uygun takımlara yerleştirilecektir.</li>
                         <li><strong>Cinsiyet:</strong> Her takımın kadrosunda en az 2 kadın oyuncu bulunması zorunludur; sahada her an en az 2 kadın oyuncu aktif oynamak zorundadır. Kadın oyuncu yerine erkek oyuncu girerek sayının 1'e düşmesi kural ihlalidir.</li>
                         <li class="whatsapp-warning"><strong>⚠️ TÜM DUYURULAR WHATSAPP KANALDA YAPILACAĞINDAN DOLAYI KANALA KATILMAK ÇOK ÖNEMLİDİR.</strong></li>
                         <li class="whatsapp-link-item"><a href="https://chat.whatsapp.com/F1qZB7Tya5cKsrYvxG93gc" target="_blank" rel="noopener noreferrer" class="whatsapp-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp Kanalına Katıl</a></li>
@@ -234,7 +239,7 @@ startSecureSession();
                 <div class="input-group" style="margin-bottom: 1.5rem;">
                     <label for="app_type_en">Application Type</label>
                     <select id="app_type_en" name="app_type" onchange="toggleAppType('en')" required style="width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1.05rem; background: #f8fafc; color: var(--text-main); appearance: none; cursor: pointer; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23004bb6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right .7em top 50%; background-size: .65em auto;">
-                        <option value="full">Full Team Application (6-10 Players)</option>
+                        <option value="full">Full Team Application (7-12 Players)</option>
                         <option value="incomplete">Incomplete Team / Solo Application</option>
                     </select>
                 </div>
@@ -274,7 +279,7 @@ startSecureSession();
                 <div class="section-header">
                     <h2>Team Roster</h2>
                 </div>
-                <p class="section-desc">List your 6 starting players and substitutes (Max. 10 players total).</p>
+                <p class="section-desc">List your 6 starting players and substitutes (Max. 12 players total).</p>
 
                 <div id="players-container-en">
                     <div class="player-input-group">
@@ -307,6 +312,11 @@ startSecureSession();
                         <input type="text" id="player_en_6" name="players[]" placeholder="6. Player Name (Starter)"
                             required>
                     </div>
+                    <div class="player-input-group">
+                        <span class="player-number">7</span>
+                        <input type="text" id="player_en_7" name="players[]" placeholder="7. Player Name (Substitute)"
+                            required>
+                    </div>
                 </div>
 
                 <button type="button" id="add-player-btn-en" class="btn-secondary">
@@ -335,7 +345,7 @@ startSecureSession();
                     <ul>
                         <li><strong>Eligibility:</strong> Only Istinye University students may participate.</li>
                         <li><strong>Registration:</strong> You can apply with a Team Name if you have one, or as "Individual" or "Incomplete Team" if you don't.</li>
-                        <li><strong>Roster:</strong> Full teams must have 6 to 10 players. Individual applicants will be placed into suitable teams by our staff.</li>
+                        <li><strong>Roster:</strong> Full teams must have 7 to 12 players. Individual applicants will be placed into suitable teams by our staff.</li>
                         <li><strong>Gender:</strong> Each roster must include at least 2 female players; at all times at least 2 female players must be active on court. Replacing a female player with a male player reducing the count to 1 is a rule violation.</li>
                         <li class="whatsapp-warning"><strong>⚠️ ALL ANNOUNCEMENTS WILL BE MADE ON THE WHATSAPP CHANNEL — JOINING IS ESSENTIAL.</strong></li>
                         <li class="whatsapp-link-item"><a href="https://chat.whatsapp.com/F1qZB7Tya5cKsrYvxG93gc" target="_blank" rel="noopener noreferrer" class="whatsapp-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Join WhatsApp Channel</a></li>
@@ -422,7 +432,7 @@ startSecureSession();
             function setupDynamicPlayers(containerId, btnId, isEn) {
                 const playersContainer = document.getElementById(containerId);
                 const addPlayerBtn = document.getElementById(btnId);
-                const maxPlayers = 10;
+                const maxPlayers = 12;
 
                 if (!playersContainer || !addPlayerBtn) return;
 
@@ -550,9 +560,9 @@ startSecureSession();
                 const teamNameInput = document.getElementById('team_name_' + langPrefix);
                 teamNameInput.required = isFull;
                 
-                // For Incomplete Teams, initially hide players 2-6 and make them not required
+                // For Incomplete Teams, initially hide players 2-7 and make them not required
                 // For Full Teams, show them and make them required
-                for (let i = 2; i <= 6; i++) {
+                for (let i = 2; i <= 7; i++) {
                     const playerGroup = playersContainer.children[i-1];
                     const playerInput = document.getElementById('player_' + langPrefix + '_' + i);
                     
@@ -597,7 +607,7 @@ startSecureSession();
 
                 const btnTextSpan = btn.querySelector('span');
                 if (btnTextSpan) {
-                    if (visibleCount < 6) {
+                    if (visibleCount < 7) {
                         btnTextSpan.textContent = isEn ? 'Add Player' : 'Oyuncu Ekle';
                     } else {
                         btnTextSpan.textContent = isEn ? 'Add Substitute' : 'Yedek Oyuncu Ekle';

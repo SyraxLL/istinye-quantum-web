@@ -87,21 +87,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $players_json = json_encode(array_values($valid_players), JSON_UNESCAPED_UNICODE);
                 $stmt->execute([$final_team_name, $captain_name, $captain_phone, $captain_email, $players_json, $submitted_lang]);
 
-                // 3. E-posta Bildirimi Gönder
+                // 3. E-posta Bildirimi Gönder (Gelişmiş HTML Tasarımı)
                 $to = "6002mustafaadsan@gmail.com";
-                $subject = "Yeni Turnuva Başvurusu: " . $final_team_name;
-                $email_body = "Sisteme yeni bir turnuva başvurusu düştü.\n\n";
-                $email_body .= "Takım Adı: " . $final_team_name . "\n";
-                $email_body .= "Kaptan: " . $captain_name . "\n";
-                $email_body .= "E-posta: " . $captain_email . "\n";
-                $email_body .= "Telefon: " . $captain_phone . "\n";
-                $email_body .= "Oyuncu Sayısı: " . $player_count . "\n";
-                $email_body .= "Başvuru Dili: " . strtoupper($submitted_lang) . "\n";
-                $email_body .= "\nDetaylar için yönetici paneline giriş yapabilirsiniz.";
+                $subject = "🏐 Yeni Başvuru: " . $final_team_name;
+
+                // Kadro Ayrımı (Mail için)
+                $main_squad = array_slice($valid_players, 0, 6);
+                $substitutes = array_slice($valid_players, 6);
+
+                $main_squad_html = !empty($main_squad) ? implode(", ", $main_squad) : "-";
+                $substitutes_html = !empty($substitutes) ? implode(", ", $substitutes) : "Yedek yok";
+
+                $email_body = '
+                <html>
+                <head>
+                    <style>
+                        body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f7f6; }
+                        .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e1e4e8; }
+                        .header { background: linear-gradient(135deg, #004bb6 0%, #003380 100%); color: #ffffff; padding: 25px; text-align: center; }
+                        .header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; text-transform: uppercase; }
+                        .content { padding: 30px; }
+                        .info-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
+                        .info-table th { text-align: left; padding: 12px; background: #f8fafc; border-bottom: 2px solid #edf2f7; color: #4a5568; font-size: 13px; text-transform: uppercase; width: 35%; }
+                        .info-table td { padding: 12px; border-bottom: 1px solid #edf2f7; color: #2d3748; font-weight: 500; }
+                        .roster-section { background: #f0f7ff; border-radius: 8px; padding: 20px; border-left: 4px solid #004bb6; margin-bottom: 25px; }
+                        .roster-title { color: #004bb6; font-weight: 700; margin-bottom: 10px; display: block; font-size: 15px; }
+                        .label-sub { color: #d35400; font-weight: 700; margin-top: 15px; display: block; font-size: 14px; }
+                        .footer { background: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #edf2f7; }
+                        .btn { display: inline-block; padding: 10px 20px; background: #25D366; color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; margin-top: 10px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2); }
+                        .admin-btn { background: #004bb6; margin-right: 10px; }
+                        .badge { display: inline-block; padding: 4px 8px; background: #edf2f7; border-radius: 4px; font-size: 11px; color: #4a5568; margin-top: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>🏐 YENİ TURNUVA KAYDI</h1>
+                        </div>
+                        <div class="content">
+                            <p style="margin-top:0;">Merhaba Mustafa,</p>
+                            <p>Sisteme yeni bir başvuru yapıldı. Detaylar aşağıdadır:</p>
+                            
+                            <table class="info-table">
+                                <tr><th>Takım Adı</th><td>' . $final_team_name . '</td></tr>
+                                <tr><th>Takım Kaptanı</th><td>' . $captain_name . '</td></tr>
+                                <tr><th>E-posta</th><td>' . $captain_email . '</td></tr>
+                                <tr><th>Telefon</th><td>' . $captain_phone . '</td></tr>
+                                <tr><th>Oyuncu Sayısı</th><td>' . $player_count . ' Arasından ' . count($valid_players) . ' Kişi</td></tr>
+                            </table>
+
+                            <div class="roster-section">
+                                <span class="roster-title">🛡️ Asil Kadro (İlk 6):</span>
+                                <div style="color: #004085; font-weight: 600;">' . $main_squad_html . '</div>
+                                
+                                ' . (count($valid_players) > 6 ? '
+                                <span class="label-sub">🔸 Yedekler:</span>
+                                <div style="color: #e67e22; font-weight: 600;">' . $substitutes_html . '</div>' : '') . '
+                            </div>
+
+                            <p style="font-size: 13px; color: #718096;">Başvuru Dili: <strong>' . strtoupper($submitted_lang) . '</strong></p>
+                        </div>
+                        <div class="footer">
+                            <a href="https://istinyequantum.com/admin.php" class="btn admin-btn">Yönetici Paneline Git</a>
+                            <a href="https://wa.me/' . preg_replace('/[^0-9]/', '', $captain_phone) . '" class="btn">Kaptana WhatsApp\'tan Yaz</a>
+                        </div>
+                    </div>
+                </body>
+                </html>';
 
                 $headers = "From: adminpanel@istinyequantum.com\r\n";
                 $headers .= "Reply-To: " . $captain_email . "\r\n";
-                $headers .= "Content-Type: text/plain; charset=utf-8\r\n";
+                $headers .= "Content-Type: text/html; charset=utf-8\r\n";
                 $headers .= "X-Mailer: PHP/" . phpversion();
 
                 // Hata oluşsa bile kullanıcıya yansıtmamak için @ kullanıyoruz
