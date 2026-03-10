@@ -27,13 +27,40 @@ if (file_exists($env_file)) {
         $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
         $pdo = new PDO($dsn, $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo "<h3 style='color:green'>Baglanti basarili!</h3>";
+        echo "<h3 style='color:green'>✅ Veritabanı Bağlantısı Başarılı!</h3>";
+
+        // Tablo Kontrolleri
+        $tables = ['registrations', 'admins'];
+        foreach ($tables as $table) {
+            $stmt = $pdo->query("SHOW TABLES LIKE '$table'");
+            if ($stmt->rowCount() > 0) {
+                echo "<p style='color:green'>✔ <b>$table</b> tablosu mevcut.</p>";
+                
+                // Kolon Kontrolü (Opsiyonel ama faydalı)
+                $columns = $pdo->query("DESCRIBE $table")->fetchAll(PDO::FETCH_COLUMN);
+                echo "<small style='color:#666'>Kolonlar: " . implode(", ", $columns) . "</small><br>";
+            } else {
+                echo "<p style='color:red'>❌ <b>$table</b> tablosu BULUNAMADI!</p>";
+            }
+        }
+
+        // Admin Hesabı Kontrolü
+        if (in_array('admins', $tables)) {
+            $adminCount = $pdo->query("SELECT COUNT(*) FROM admins")->fetchColumn();
+            if ($adminCount > 0) {
+                echo "<p style='color:green'>✔ En az 1 yönetici hesabı tanımlı ($adminCount adet).</p>";
+            } else {
+                echo "<p style='color:orange'>⚠ Yönetici tablosu boş! Giriş yapamazsınız.</p>";
+            }
+        }
+
     }
     catch (PDOException $e) {
-        echo "<h3 style='color:red'>Hata: " . $e->getMessage() . "</h3>";
+        echo "<h3 style='color:red'>❌ Hata: " . $e->getMessage() . "</h3>";
     }
 } else {
-    echo "<b>Hata: .env dosyasi bulunamadi!</b>";
+    echo "<b>Hata: .env dosyası bulunamadı!</b>";
 }
+
 
 
