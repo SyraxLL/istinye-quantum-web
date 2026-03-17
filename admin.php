@@ -139,7 +139,7 @@ if ($logged_in && $pdo) {
             
             // Oyuncuları JSON formatına çevirme
             $players = [];
-            for ($i = 1; $i <= 7; $i++) {
+            for ($i = 1; $i <= 12; $i++) {
                 if (!empty($_POST["player$i"])) {
                     $players[] = sanitizeInput(trim($_POST["player$i"]));
                 }
@@ -952,9 +952,13 @@ if ($logged_in && $pdo) {
                             <?php endfor; ?>
                         </div>
                         
-                        <h4 style="margin-top: 0.5rem; margin-bottom: 0.2rem; color: #92400e; font-size: 0.9rem;">Yedek Oyuncu</h4>
-                        <div style="padding: 0.8rem; background: #fffbeb; border-radius: 8px; border: 1px solid #fef3c7;">
-                            <input type="text" name="player7" id="modal_player_7" placeholder="7. Oyuncu (Yedek)" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+                        <h4 style="margin-top: 0.5rem; margin-bottom: 0.2rem; color: #92400e; font-size: 0.9rem;">Yedek Oyuncular (Opsiyonel)</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; padding: 0.8rem; background: #fffbeb; border-radius: 8px; border: 1px solid #fef3c7;">
+                            <?php for($i=7; $i<=12; $i++): ?>
+                            <div>
+                                <input type="text" name="player<?php echo $i; ?>" id="modal_player_<?php echo $i; ?>" placeholder="<?php echo $i; ?>. Oyuncu (Yedek)" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+                            </div>
+                            <?php endfor; ?>
                         </div>
                         
                         <div style="margin-top: 2rem; text-align: right;">
@@ -1000,7 +1004,7 @@ if ($logged_in && $pdo) {
                     document.getElementById('modal_captain_email').value = '';
                     document.getElementById('modal_lang').value = 'tr';
                     
-                    for(let i=1; i<=7; i++) {
+                    for(let i=1; i<=12; i++) {
                         document.getElementById('modal_player_' + i).value = '';
                     }
                     
@@ -1017,7 +1021,7 @@ if ($logged_in && $pdo) {
                     document.getElementById('modal_lang').value = teamData.submitted_lang || 'tr';
                     
                     // Clear previous players
-                    for(let i=1; i<=7; i++) {
+                    for(let i=1; i<=12; i++) {
                         document.getElementById('modal_player_' + i).value = '';
                     }
                     
@@ -1027,7 +1031,7 @@ if ($logged_in && $pdo) {
                             const players = JSON.parse(teamData.players);
                             if (Array.isArray(players)) {
                                 players.forEach((player, index) => {
-                                    if (index < 7) {
+                                    if (index < 12) {
                                         document.getElementById('modal_player_' + (index + 1)).value = player;
                                     }
                                 });
