@@ -471,6 +471,25 @@ if ($logged_in && $pdo) {
             margin-top: 0.4rem;
             font-weight: 500;
         }
+        .player-role-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-right: 4px;
+            text-transform: uppercase;
+        }
+        .role-asil {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+        .role-yedek {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
         .table-responsive {
             overflow-x: auto;
             border: 1px solid var(--border-color);
@@ -711,7 +730,11 @@ if ($logged_in && $pdo) {
                                         <ul class="player-list">
                                             <?php foreach ($playersArr as $i => $p): ?>
                                                 <li>
-                                                    <span style="color: var(--text-muted); font-size: 0.8rem; margin-right: 0.3rem;"><?php echo $i + 1; ?>.</span> 
+                                                    <?php if ($i < 6): ?>
+                                                        <span class="player-role-badge role-asil">Asil</span>
+                                                    <?php else: ?>
+                                                        <span class="player-role-badge role-yedek">Yedek</span>
+                                                    <?php endif; ?>
                                                     <?php echo htmlspecialchars($p); ?>
                                                 </li>
                                             <?php endforeach; ?>
@@ -784,7 +807,11 @@ if ($logged_in && $pdo) {
                                         <ul class="player-list">
                                             <?php foreach ($playersArr as $i => $p): ?>
                                                 <li style="color: #991b1b;">
-                                                    <span style="font-size: 0.8rem; margin-right: 0.3rem;">Oyuncu <?php echo $i + 1; ?>:</span> 
+                                                    <?php if ($i < 6): ?>
+                                                        <span class="player-role-badge role-asil" style="background-color: #fee2e2; color: #991b1b; border-color: #fecaca;">Asil</span>
+                                                    <?php else: ?>
+                                                        <span class="player-role-badge role-yedek" style="background-color: #fffbeb; color: #92400e; border-color: #fef3c7;">Yedek</span>
+                                                    <?php endif; ?>
                                                     <strong><?php echo htmlspecialchars($p); ?></strong>
                                                 </li>
                                             <?php endforeach; ?>
@@ -916,13 +943,18 @@ if ($logged_in && $pdo) {
                             </div>
                         </div>
                         
-                        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--text-main);">Oyuncu Kadrosu</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                            <?php for($i=1; $i<=7; $i++): ?>
+                        <h4 style="margin-top: 1.5rem; margin-bottom: 0.2rem; color: #0369a1; font-size: 0.9rem;">Asil Kadro (İlk 6 Oyuncu)</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; padding: 0.8rem; background: #f0f9ff; border-radius: 8px; border: 1px solid #e0f2fe;">
+                            <?php for($i=1; $i<=6; $i++): ?>
                             <div>
-                                <input type="text" name="player<?php echo $i; ?>" id="modal_player_<?php echo $i; ?>" placeholder="Oyuncu <?php echo $i; ?>" style="width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem;">
+                                <input type="text" name="player<?php echo $i; ?>" id="modal_player_<?php echo $i; ?>" placeholder="<?php echo $i; ?>. Oyuncu (Asil)" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
                             </div>
                             <?php endfor; ?>
+                        </div>
+                        
+                        <h4 style="margin-top: 0.5rem; margin-bottom: 0.2rem; color: #92400e; font-size: 0.9rem;">Yedek Oyuncu</h4>
+                        <div style="padding: 0.8rem; background: #fffbeb; border-radius: 8px; border: 1px solid #fef3c7;">
+                            <input type="text" name="player7" id="modal_player_7" placeholder="7. Oyuncu (Yedek)" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
                         </div>
                         
                         <div style="margin-top: 2rem; text-align: right;">
