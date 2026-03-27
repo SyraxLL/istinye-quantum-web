@@ -555,7 +555,14 @@ if ($logged_in && $pdo) {
 <?php else: ?>
     <div class="admin-container">
         <div class="admin-header">
-            <h1>Turnuva Kayıtları <span style="color: var(--text-muted); font-size: 1.4rem;">(<?php echo count($registrations); ?> Takım)</span></h1>
+            <h1 style="display: flex; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                Turnuva Kayıtları 
+                <span class="header-counters" style="display: inline-flex; align-items: center; gap: 0.5rem; font-family: system-ui, -apple-system, sans-serif;">
+                    <span style="font-size: 0.85rem; padding: 0.3rem 0.8rem; background: #f1f5f9; color: #475569; border-radius: 6px; font-weight: 700; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">Toplam: <?php echo count($registrations); ?></span>
+                    <span style="font-size: 0.85rem; padding: 0.3rem 0.8rem; background: #e0f2fe; color: #0369a1; border-radius: 6px; font-weight: 700; border: 1px solid #bae6fd; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">Tam Takım: <?php echo count($fullTeams); ?></span>
+                    <span style="font-size: 0.85rem; padding: 0.3rem 0.8rem; background: #fef2f2; color: #b91c1c; border-radius: 6px; font-weight: 700; border: 1px solid #fecaca; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">Bireysel/Eksik: <?php echo count($incompleteTeams); ?></span>
+                </span>
+            </h1>
             <a href="?logout=1" class="logout-btn">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                 Çıkış Yap
