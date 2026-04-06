@@ -564,10 +564,10 @@ if ($logged_in && $pdo) {
                 </span>
             </h1>
             <div style="display: flex; gap: 0.8rem; align-items: center;">
-                <button type="button" class="login-btn" style="display: inline-flex; margin: 0; width: auto; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); line-height: 1.2; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); font-size: 0.95rem; font-family: system-ui, -apple-system, sans-serif; border: none; border-radius: 8px; color: white; cursor: pointer; text-decoration: none; font-weight: bold;" onclick="exportPDF()" id="pdfDonwloadBtn">
+                <a href="export_pdf.php" target="_blank" class="login-btn" style="display: inline-flex; margin: 0; width: auto; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); line-height: 1.2; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); font-size: 0.95rem; font-family: system-ui, -apple-system, sans-serif; border: none; border-radius: 8px; color: white; cursor: pointer; text-decoration: none; font-weight: bold;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     PDF İndir
-                </button>
+                </a>
                 <a href="?logout=1" class="logout-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                     Çıkış Yap
@@ -1071,137 +1071,5 @@ if ($logged_in && $pdo) {
         </div>
     <?php endif; ?>
 
-    <!-- PDF Çıktı Konteyneri (Sayfa düzenini korumak için absolute yapıldı) -->
-    <div id="pdfPrintContainer" style="position: absolute; left: -9999px; top: 0; width: 800px; background: white; padding: 20px; font-family: 'Inter', -apple-system, sans-serif; color: #1e293b;">
-        <div style="text-align: center; border-bottom: 4px solid #004dbe; padding-bottom: 20px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 20px;">
-            <img src="isu_sks_logo.png" alt="SKS Logo" style="height: 60px;">
-            <div>
-                <h1 style="color: #004dbe; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">İSTİNYE ÜNİVERSİTESİ</h1>
-                <h2 style="color: #475569; margin: 5px 0 0 0; font-size: 16px; font-weight: 600;">Voleybol Turnuvası Kayıtlı Takımlar</h2>
-                <p style="margin: 8px 0 0 0; color: #94a3b8; font-size: 12px; font-weight: 500;">Tarih: <?php echo date('d.m.Y H:i'); ?></p>
-            </div>
-            <img src="volleyball-transparent.png" alt="Volleyball" style="height: 60px;">
-        </div>
-
-        <h3 style="color: #004dbe; border-left: 5px solid #004dbe; padding-left: 12px; margin-bottom: 20px; font-size: 18px;">Tam Takım Başvuruları (<?php echo count($fullTeams); ?>)</h3>
-        <?php foreach ($fullTeams as $index => $row): ?>
-            <div style="border: 2px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 15px; page-break-inside: avoid; background: #f8fafc;">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 10px;">
-                    <div>
-                        <h4 style="margin: 0; color: #0f172a; font-size: 16px; font-weight: 800;"><?php echo htmlspecialchars($row['team_name'] ?? ''); ?> <span style="font-size: 10px; font-weight: 700; background: <?php echo (!empty($row['submitted_lang']) && $row['submitted_lang'] == 'en') ? '#bae6fd' : '#e2e8f0'; ?>; color: #334155; padding: 2px 6px; border-radius: 4px; margin-left: 8px; vertical-align: middle;"><?php echo strtoupper(htmlspecialchars($row['submitted_lang'])); ?></span></h4>
-                        <p style="margin: 4px 0 0 0; color: #475569; font-size: 12px; font-weight: 500;">
-                            <strong style="color: #0f172a;">Kaptan:</strong> <?php echo htmlspecialchars($row['captain_name'] ?? ''); ?> &nbsp;|&nbsp; 
-                            📞 <?php echo htmlspecialchars($row['captain_phone'] ?? ''); ?> &nbsp;|&nbsp; 
-                            ✉️ <?php echo htmlspecialchars($row['captain_email'] ?? ''); ?>
-                        </p>
-                    </div>
-                    <div style="font-size: 18px; font-weight: 900; color: #cbd5e1;">#<?php echo isset($row['id']) ? $row['id'] : ($index + 1); ?></div>
-                </div>
-                <div>
-                    <h5 style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; color: #334155; text-transform: uppercase;">Oyuncu Kadrosu</h5>
-                    <div style="display: flex; flex-wrap: wrap;">
-                        <?php 
-                        $playersArr = isset($row['players']) ? json_decode($row['players'], true) : null;
-                        if ($playersArr && is_array($playersArr)): 
-                            foreach ($playersArr as $i => $p): 
-                                $role = ($i < 6) ? 'Asil' : 'Yedek';
-                                $roleColor = ($i < 6) ? '#0284c7' : '#d97706';
-                                $roleBg = ($i < 6) ? '#e0f2fe' : '#fef3c7';
-                        ?>
-                            <div style="width: 50%; box-sizing: border-box; font-size: 12px; margin-bottom: 4px; color: #1e293b; font-weight: 500; display: flex; align-items: center;">
-                                <span style="font-size: 9px; font-weight: 800; color: <?php echo $roleColor; ?>; background: <?php echo $roleBg; ?>; padding: 2px 4px; border-radius: 4px; display: inline-block; width: 35px; text-align: center; text-transform: uppercase; margin-right: 6px; border: 1px solid <?php echo $roleColor; ?>33;"><?php echo $role; ?></span> <?php echo htmlspecialchars($p); ?>
-                            </div>
-                        <?php 
-                            endforeach; 
-                        else: 
-                        ?>
-                            <span style="font-size: 12px; color: #94a3b8; font-style: italic;">Veri girilmemiş</span>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-
-        <?php if (count($incompleteTeams) > 0): ?>
-        <div style="page-break-before: always;"></div>
-        <div style="margin-top: 20px; margin-bottom: 15px; text-align: center;">
-            <img src="isu_sks_logo.png" alt="SKS Logo" style="height: 30px; opacity: 0.5;">
-        </div>
-        <h3 style="color: #dc2626; border-left: 5px solid #dc2626; padding-left: 12px; margin-bottom: 20px; font-size: 18px;">Bireysel / Eksik Takım Başvuruları (<?php echo count($incompleteTeams); ?>)</h3>
-        <?php foreach ($incompleteTeams as $index => $row): ?>
-            <div style="border: 2px solid #fecaca; border-radius: 8px; padding: 15px; margin-bottom: 15px; page-break-inside: avoid; background: #fff5f5;">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fecaca; padding-bottom: 10px; margin-bottom: 10px;">
-                    <div>
-                        <h4 style="margin: 0; color: #991b1b; font-size: 16px; font-weight: 800;"><?php echo htmlspecialchars($row['team_name'] ?? ''); ?></h4>
-                        <p style="margin: 4px 0 0 0; color: #991b1b; font-size: 12px; font-weight: 500;">
-                            <strong style="color: #7f1d1d;">Kişi/Kaptan:</strong> <?php echo htmlspecialchars($row['captain_name'] ?? ''); ?> &nbsp;|&nbsp; 
-                            📞 <?php echo htmlspecialchars($row['captain_phone'] ?? ''); ?> &nbsp;|&nbsp; 
-                            ✉️ <?php echo htmlspecialchars($row['captain_email'] ?? ''); ?>
-                        </p>
-                    </div>
-                    <div style="font-size: 18px; font-weight: 900; color: #fca5a5;">#<?php echo isset($row['id']) ? $row['id'] : ($index + 1); ?></div>
-                </div>
-                <div>
-                    <h5 style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; color: #991b1b; text-transform: uppercase;">Ekli Oyuncular</h5>
-                    <div style="display: flex; flex-wrap: wrap;">
-                        <?php 
-                        $playersArr = isset($row['players']) ? json_decode($row['players'], true) : null;
-                        if ($playersArr && is_array($playersArr)): 
-                            foreach ($playersArr as $i => $p): 
-                                $role = ($i < 6) ? 'Asil' : 'Yedek';
-                        ?>
-                            <div style="width: 50%; box-sizing: border-box; font-size: 12px; margin-bottom: 4px; color: #7f1d1d; font-weight: 500; display: flex; align-items: center;">
-                                <span style="font-size: 9px; font-weight: 800; color: #991b1b; background: #fee2e2; padding: 2px 4px; border-radius: 4px; display: inline-block; width: 35px; text-align: center; text-transform: uppercase; margin-right: 6px; border: 1px solid #991b1b33;"><?php echo $role; ?></span> <?php echo htmlspecialchars($p); ?>
-                            </div>
-                        <?php 
-                            endforeach; 
-                        else: 
-                        ?>
-                            <span style="font-size: 12px; color: #fca5a5; font-style: italic;">Veri yok</span>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
-
-    <!-- HTML2PDF CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script>
-    function exportPDF() {
-        var btn = document.getElementById('pdfDonwloadBtn');
-        var originalText = btn.innerHTML;
-        btn.innerHTML = '<span style="display:inline-block; animation: spin 1s linear infinite; margin-right:0.5rem;">⏳</span> Hazırlanıyor...';
-        btn.disabled = true;
-
-        var element = document.getElementById('pdfPrintContainer');
-        
-        var opt = {
-            margin:       10,
-            filename:     'turnuva_takimlari.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 1.5, useCORS: true, logging: false },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak:    { mode: 'css' }
-        };
-        
-        html2pdf().set(opt).from(element).save().then(function() {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }).catch(function(err) {
-            console.error(err);
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            alert("PDF oluşturulurken bir hata oluştu.");
-        });
-    }
-    
-    // Add CSS for loader
-    var style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } }';
-    document.getElementsByTagName('head')[0].appendChild(style);
-    </script>
 </body>
 </html>
