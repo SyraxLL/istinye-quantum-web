@@ -211,6 +211,9 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
         <h3 class="section-title">Tam Takım Başvuruları (<?php echo count($fullTeams); ?>)</h3>
         
         <?php foreach ($fullTeams as $index => $row): ?>
+            <?php if ($index > 0 && $index % 3 == 0): ?>
+                <div style="page-break-before: always; height: 1px;"></div>
+            <?php endif; ?>
             <div class="team-box">
                 <div class="team-header">
                     <div style="float: right; font-size: 20px; font-weight: 800; color: #cbd5e1;">#<?php echo htmlspecialchars($row['id'] ?? ''); ?></div>
@@ -281,6 +284,9 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
             <h3 class="section-title red">Bireysel / Eksik Kayıtlar (<?php echo count($incompleteTeams); ?>)</h3>
             
             <?php foreach ($incompleteTeams as $index => $row): ?>
+                <?php if ($index > 0 && $index % 5 == 0): ?>
+                    <div style="page-break-before: always; height: 1px;"></div>
+                <?php endif; ?>
                 <div class="team-box red">
                     <div class="team-header">
                         <div style="float: right; font-size: 20px; font-weight: 800; color: #fca5a5;">#<?php echo htmlspecialchars($row['id'] ?? ''); ?></div>
