@@ -19,7 +19,7 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
         $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-        $stmt = $pdo->query("SELECT * FROM registrations ORDER BY id ASC");
+        $stmt = $pdo->query("SELECT * FROM registrations ORDER BY created_at ASC");
         $registrations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         foreach ($registrations as $reg) {

@@ -193,7 +193,7 @@ $incompleteTeams = [];
 
 if ($logged_in && $pdo) {
     try {
-        $stmt = $pdo->query("SELECT * FROM registrations ORDER BY id DESC");
+        $stmt = $pdo->query("SELECT * FROM registrations ORDER BY created_at ASC");
         $registrations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         foreach ($registrations as $reg) {
