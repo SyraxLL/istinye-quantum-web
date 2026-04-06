@@ -726,7 +726,7 @@ if ($logged_in && $pdo) {
                             <?php foreach ($fullTeams as $index => $row): ?>
                             <tr>
                                 <td style="font-weight: 700; color: var(--text-muted);">
-                                    #<?php echo isset($row['id']) ? $row['id'] : ($index + 1); ?>
+                                    #<?php echo ($index + 1); ?>
                                 </td>
                                 <td>
                                     <strong style="color: var(--isu-blue); font-size: 1.05rem;"><?php echo htmlspecialchars($row['team_name'] ?? ''); ?></strong>
@@ -803,7 +803,7 @@ if ($logged_in && $pdo) {
                             <?php foreach ($incompleteTeams as $index => $row): ?>
                             <tr style="border-bottom: 1px solid #fecaca;">
                                 <td style="font-weight: 700; color: #991b1b;">
-                                    #<?php echo isset($row['id']) ? $row['id'] : ($index + 1); ?>
+                                    #<?php echo ($index + 1); ?>
                                 </td>
                                 <td>
                                     <strong style="color: #dc2626; font-size: 1.05rem;"><?php echo htmlspecialchars($row['team_name'] ?? ''); ?></strong>

@@ -216,7 +216,7 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
             <?php endif; ?>
             <div class="team-box">
                 <div class="team-header">
-                    <div style="float: right; font-size: 20px; font-weight: 800; color: #cbd5e1;">#<?php echo htmlspecialchars($row['id'] ?? ''); ?></div>
+                    <div style="float: right; font-size: 20px; font-weight: 800; color: #cbd5e1;">#<?php echo ($index + 1); ?></div>
                     <h4 class="team-title"><?php echo htmlspecialchars($row['team_name'] ?? ''); ?></h4>
                     <p class="team-meta">
                         <strong>Kaptan:</strong> <?php echo htmlspecialchars($row['captain_name'] ?? ''); ?> | 
@@ -289,7 +289,7 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
                 <?php endif; ?>
                 <div class="team-box red">
                     <div class="team-header">
-                        <div style="float: right; font-size: 20px; font-weight: 800; color: #fca5a5;">#<?php echo htmlspecialchars($row['id'] ?? ''); ?></div>
+                        <div style="float: right; font-size: 20px; font-weight: 800; color: #fca5a5;">#<?php echo ($index + 1); ?></div>
                         <h4 class="team-title"><?php echo htmlspecialchars($row['team_name'] ?? ''); ?></h4>
                         <p class="team-meta">
                             <strong>Kişi/Kaptan:</strong> <?php echo htmlspecialchars($row['captain_name'] ?? ''); ?> | 
