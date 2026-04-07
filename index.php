@@ -1,6 +1,37 @@
 <?php
 require_once __DIR__ . '/security.php';
 startSecureSession();
+
+// Veritabanı bağlantısı ve mod kontrolü
+$env = loadEnv(__DIR__ . '/.env');
+$site_mode = 'registration';
+$matches = [];
+
+if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
+    try {
+        $dsn = "mysql:host=" . $env['DB_HOST'] . ";dbname=" . $env['DB_NAME'] . ";charset=" . ($env['DB_CHARSET'] ?? 'utf8mb4');
+        $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Modu çek
+        $stmt = $pdo->query("SELECT meta_value FROM settings WHERE meta_key = 'site_mode'");
+        $mode_row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($mode_row) $site_mode = $mode_row['meta_value'];
+
+        // Maçları çek
+        if ($site_mode === 'bracket') {
+            $stmt = $pdo->query("SELECT * FROM matches ORDER BY round ASC, match_order ASC");
+            $matches_raw = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Maçları raundlara göre grupla
+            foreach ($matches_raw as $m) {
+                $matches[$m['round']][] = $m;
+            }
+        }
+    } catch (PDOException $e) {
+        // Hata durumunda varsayılan registration kalsın
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="tr">
@@ -19,47 +50,220 @@ startSecureSession();
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="<?php echo ($site_mode === 'bracket') ? 'esports-neon-bracket' : ''; ?>">
 
 
-    <div class="container">
-        <header>
-            <div class="header-title-row">
-                <div class="club-logo-header">
-                    <img src="beyaz-boş.png" alt="Kulüp Logosu">
+    <?php if ($site_mode === 'bracket'): ?>
+        <!-- ── TAM SAYFA YENİ TURNUVA AĞACI (DOUBLE SIDED) ── -->
+        <div class="bracket-page-container">
+            
+            <header class="bracket-header">
+                <div class="header-title-row" style="justify-content: center; gap: 2rem;">
+                    <div class="club-logo-header">
+                        <img src="beyaz-boş.png" alt="Kulüp Logosu" style="height: 120px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+                    </div>
+                    <div>
+                        <h1 class="tr-content title-dynamic text-shadow">
+                            <span class="text-volley" style="color:var(--isu-blue);">VOLEYBOL</span>
+                            <span class="text-tourney" style="color:var(--isu-red);">TURNUVASI <span class="volley-icon">🏐</span></span>
+                        </h1>
+                        <h1 class="en-content title-dynamic text-shadow" style="display:none;">
+                            <span class="text-volley" style="color:var(--isu-blue);">VOLLEYBALL</span>
+                            <span class="text-tourney" style="color:var(--isu-red);">TOURNAMENT <span class="volley-icon">🏐</span></span>
+                        </h1>
+                    </div>
                 </div>
-                <h1 class="tr-content title-dynamic">
-                    <span class="text-volley">VOLEYBOL</span>
-                    <span class="text-tourney">TURNUVASI <span class="volley-icon">🏐</span></span>
-                </h1>
-                <h1 class="en-content title-dynamic" style="display:none;">
-                    <span class="text-volley">VOLLEYBALL</span>
-                    <span class="text-tourney">TOURNAMENT <span class="volley-icon">🏐</span></span>
-                </h1>
+
+
+            </header>
+
+            <div class="bracket-content-wrapper masonry-blur-bg">
+                <div class="status-banner centered-banner">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <span class="tr-content">Turnuva başladı! Güncel eşleşmeleri aşağıdan takip edebilirsiniz.</span>
+                    <span class="en-content" style="display:none;">Tournament is live! Follow the latest matchups below.</span>
+                </div>
+
+                <?php 
+                $matchesById = [];
+                for ($r = 1; $r <= 4; $r++) {
+                    if (isset($matches[$r])) {
+                        foreach ($matches[$r] as $m) {
+                            $matchesById[$m['id']] = $m;
+                        }
+                    }
+                }
+
+                // Ekrana Maç Kutusunu Basan Helper Fonksiyon (sadece template içerisinde kullanım için)
+                function renderMatchup($matchId, $matchesById) {
+                    if (!isset($matchesById[$matchId])) return;
+                    $m = $matchesById[$matchId];
+                    $t1w = (!empty($m['winner_name']) && $m['winner_name'] == $m['team1_name']) ? 'winner' : '';
+                    $t2w = (!empty($m['winner_name']) && $m['winner_name'] == $m['team2_name']) ? 'winner' : '';
+
+                    // Takım belirlenmemişse 'Belirlenmedi' göster
+                    $team1Display = !empty($m['team1_name']) ? htmlspecialchars($m['team1_name']) : 'Belirlenmedi';
+                    $team2Display = !empty($m['team2_name']) ? htmlspecialchars($m['team2_name']) : 'Belirlenmedi';
+                    $team1Empty   = empty($m['team1_name']);
+                    $team2Empty   = empty($m['team2_name']);
+
+                    // Maç durumu tespiti
+                    $isCompleted = !empty($m['winner_name']);
+                    $isUpcoming  = $team1Empty || $team2Empty;
+                    $cardClass   = 'bracket-matchup';
+                    if ($isUpcoming)  $cardClass .= ' upcoming-match';
+                    if ($isCompleted) $cardClass .= ' completed-match';
+                    ?>
+                    <div class="<?php echo $cardClass; ?>">
+
+                        <?php if (!empty($m['match_time'])): ?>
+                            <div class="match-time-badge">
+                                <span class="clock-icon">🕒</span>
+                                <?php echo htmlspecialchars($m['match_time']); ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="bracket-team top-team <?php echo $t1w; ?> <?php echo $team1Empty ? 'empty-slot' : ''; ?>">
+                            <span class="team-name" title="<?php echo $team1Display; ?>">
+                                <?php echo $team1Display; ?>
+                            </span>
+                            <?php if (!$team1Empty): ?>
+                                <span class="team-score"><?php echo $m['score1']; ?></span>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="bracket-team bottom-team <?php echo $t2w; ?> <?php echo $team2Empty ? 'empty-slot' : ''; ?>">
+                            <span class="team-name" title="<?php echo $team2Display; ?>">
+                                <?php echo $team2Display; ?>
+                            </span>
+                            <?php if (!$team2Empty): ?>
+                                <span class="team-score"><?php echo $m['score2']; ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+
+                <div class="tournament-bracket-double">
+                    <!-- SOL KANAT -->
+                    <div class="bracket-side left-side">
+                        <!-- Son 16 (Sol) -->
+                        <div class="bracket-round">
+                            <div class="round-title"><span class="tr-content">Son 16</span><span class="en-content" style="display:none;">Round of 16</span></div>
+                            <?php foreach([1,2,3,4] as $mid) renderMatchup($mid, $matchesById); ?>
+                        </div>
+                        <!-- Çeyrek Final (Sol) -->
+                        <div class="bracket-round">
+                            <div class="round-title"><span class="tr-content">Çeyrek Final</span><span class="en-content" style="display:none;">Quarter Final</span></div>
+                            <?php foreach([9,10] as $mid) renderMatchup($mid, $matchesById); ?>
+                        </div>
+                        <!-- Yarı Final (Sol) -->
+                        <div class="bracket-round">
+                            <div class="round-title"><span class="tr-content">Yarı Final</span><span class="en-content" style="display:none;">Semi Final</span></div>
+                            <?php foreach([13] as $mid) renderMatchup($mid, $matchesById); ?>
+                        </div>
+                    </div>
+
+                    <!-- FİNAL ORTA MERKEZ -->
+                    <div class="bracket-center">
+                        <div class="bracket-round final-round">
+                            <div class="round-title final-title">
+                                <span class="tr-content">🏆 FİNAL 🏆</span><span class="en-content" style="display:none;">🏆 FINAL 🏆</span>
+                            </div>
+                            <?php renderMatchup(15, $matchesById); ?>
+                            
+                            <!-- Şampiyon Vurgusu -->
+                            <?php 
+                            if(isset($matchesById[15]) && !empty($matchesById[15]['winner_name'])) {
+                                echo '<div class="champion-box glass-effect">';
+                                echo '<div class="trophy-icon">🏆</div>';
+                                echo '<h3>Şampiyon</h3>';
+                                echo '<div class="champion-name">'.htmlspecialchars($matchesById[15]['winner_name']).'</div>';
+                                echo '</div>';
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+                    <!-- SAĞ KANAT -->
+                    <div class="bracket-side right-side">
+                        <!-- Yarı Final (Sağ) - Reverse Flow -->
+                        <div class="bracket-round">
+                            <div class="round-title"><span class="tr-content">Yarı Final</span><span class="en-content" style="display:none;">Semi Final</span></div>
+                            <?php foreach([14] as $mid) renderMatchup($mid, $matchesById); ?>
+                        </div>
+                        <!-- Çeyrek Final (Sağ) -->
+                        <div class="bracket-round">
+                            <div class="round-title"><span class="tr-content">Çeyrek Final</span><span class="en-content" style="display:none;">Quarter Final</span></div>
+                            <?php foreach([11,12] as $mid) renderMatchup($mid, $matchesById); ?>
+                        </div>
+                        <!-- Son 16 (Sağ) -->
+                        <div class="bracket-round">
+                            <div class="round-title"><span class="tr-content">Son 16</span><span class="en-content" style="display:none;">Round of 16</span></div>
+                            <?php foreach([5,6,7,8] as $mid) renderMatchup($mid, $matchesById); ?>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-            <p class="tr-content desc-dynamic">
-                Sahaya çıkmaya hazır mısın? <br>
-                <strong class="highlight-action">Takımını kur</strong>, yeteneğini göster ve <strong
-                    class="highlight-action">kupayı evine götür!</strong>
-            </p>
-            <p class="en-content desc-dynamic" style="display:none;">
-                Ready to hit the court? <br>
-                <strong class="highlight-action">Build your team</strong>, show your skills, and <strong
-                    class="highlight-action">take the trophy home!</strong>
-            </p>
-
-            <div class="lang-toggle-container">
-                <label class="lang-switch" for="lang-checkbox">
-                    <input type="checkbox" id="lang-checkbox">
-                    <div class="slider"></div>
-                    <span class="lang-label tr-label">TR</span>
-                    <span class="lang-label en-label">EN</span>
-                </label>
+            
+            <div style="text-align: center; padding: 2rem;">
+                <p class="tr-content" style="font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.5);">Turnuva boyunca tüm maçlar İstinye Üniversitesi kampüsünde oynanacaktır.</p>
+                <p class="en-content" style="display:none; font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.5);">All matches will be played at Istinye University campus throughout the tournament.</p>
             </div>
-        </header>
-        <form action="submit.php" method="POST" class="registration-form tr-content" id="tournamentFormTR">
+        </div>
+
+        <!-- Orijinal JS'nin çalışması için gizli dummy checkbox -->
+        <input type="checkbox" id="lang-checkbox_hidden" style="display:none;">
+        <script>
+            // Ensure the hidden checkbox propagates correctly if it was created
+            document.getElementById('lang-checkbox_hidden').addEventListener('change', function(e) {
+                // If there's original script logic attached, it triggers. 
+                // Wait, original logic targets 'lang-checkbox', so let's keep that ID for it.
+            });
+        </script>
+        <!-- Need a dummy checkbox with real ID for original event listeners if they strictly search for it by ID -->
+        <input type="checkbox" id="lang-checkbox" style="display:none;" onchange="if(typeof setLanguage === 'function'){ setLanguage(this.checked ? 'en' : 'tr'); document.getElementById('lang-checkbox-bracket').checked = this.checked; }">
+
+    <?php else: ?>
+        <!-- ── KAYIT FORMU GÖRÜNÜMÜ ── -->
+        <div class="container">
+            <header>
+                <div class="header-title-row">
+                    <div class="club-logo-header">
+                        <img src="beyaz-boş.png" alt="Kulüp Logosu">
+                    </div>
+                    <h1 class="tr-content title-dynamic">
+                        <span class="text-volley">VOLEYBOL</span>
+                        <span class="text-tourney">TURNUVASI <span class="volley-icon">🏐</span></span>
+                    </h1>
+                    <h1 class="en-content title-dynamic" style="display:none;">
+                        <span class="text-volley">VOLLEYBALL</span>
+                        <span class="text-tourney">TOURNAMENT <span class="volley-icon">🏐</span></span>
+                    </h1>
+                </div>
+
+                <p class="tr-content desc-dynamic">
+                    Sahaya çıkmaya hazır mısın? <br>
+                    <strong class="highlight-action">Takımını kur</strong>, yeteneğini göster ve <strong class="highlight-action">kupayı evine götür!</strong>
+                </p>
+                <p class="en-content desc-dynamic" style="display:none;">
+                    Ready to hit the court? <br>
+                    <strong class="highlight-action">Build your team</strong>, show your skills, and <strong class="highlight-action">take the trophy home!</strong>
+                </p>
+
+                <div class="lang-toggle-container">
+                    <label class="lang-switch" for="lang-checkbox">
+                        <input type="checkbox" id="lang-checkbox">
+                        <div class="slider"></div>
+                        <span class="lang-label tr-label">TR</span>
+                        <span class="lang-label en-label">EN</span>
+                    </label>
+                </div>
+            </header>
+
+            <!-- GİZLİ Bracket check hatası almamak için form etiketi aynen aşağıdaki gibi açılır -->
+            <form action="submit.php" method="POST" class="registration-form tr-content" id="tournamentFormTR">
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generateCsrfToken()); ?>">
             <input type="hidden" name="submitted_lang" value="tr">
 
@@ -398,6 +602,7 @@ startSecureSession();
             </button>
         </form>
 
+        <?php endif; ?>
     </div>
     <a href="https://chat.whatsapp.com/F1qZB7Tya5cKsrYvxG93gc" target="_blank" rel="noopener noreferrer" class="fab-whatsapp" aria-label="WhatsApp Kanalı">
         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>

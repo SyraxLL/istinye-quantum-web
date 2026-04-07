@@ -147,11 +147,11 @@ header {
 }
 
 .club-logo-header img {
-    height: 120px;
+    height: 125px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
-    margin-left: -5rem;
+    margin-left: 0;
 }
 
 @media (max-width: 768px) {
@@ -177,20 +177,19 @@ header {
 }
 
 .text-volley {
-    font-size: 4rem;
+    font-size: 2.8rem;
     font-weight: 900;
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 4px;
-    /* 3D and Glow Effect */
     text-shadow:
-        3px 3px 0px var(--isu-red),
-        -2px -2px 0px var(--isu-blue-light),
-        0 0 20px rgba(255, 255, 255, 0.4);
+        2px 2px 0px var(--isu-red),
+        -1px -1px 0px var(--isu-blue-light),
+        0 0 15px rgba(255, 255, 255, 0.4);
 }
 
 .text-tourney {
-    font-size: 2.8rem;
+    font-size: 2rem;
     font-weight: 800;
     color: var(--isu-yellow);
     text-transform: uppercase;
@@ -198,8 +197,8 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    text-shadow: 2px 2px 0px var(--isu-blue-light);
+    gap: 10px;
+    text-shadow: 1px 1px 0px var(--isu-blue-light);
 }
 
 /* Bouncing Volleyball Icon */
@@ -256,16 +255,20 @@ header {
 
 @media (max-width: 768px) {
     .text-volley {
-        font-size: 3rem;
+        font-size: 2rem;
         letter-spacing: 2px;
     }
 
     .text-tourney {
-        font-size: 2.2rem;
+        font-size: 1.5rem;
     }
 
     .volley-icon {
-        font-size: 2.2rem;
+        font-size: 1.6rem;
+    }
+
+    .club-logo-header img {
+        height: 94px;
     }
 
     .desc-dynamic {
@@ -1274,4 +1277,816 @@ body.lang-en header p.en-content {
 .whatsapp-btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 6px rgba(37, 211, 102, 0.30);
+}
+
+/* ── Double Sided Tournament Bracket Styles ── */
+.bracket-page-container {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.bracket-header {
+    background: transparent;
+    text-align: center;
+    padding: 1.5rem 0 1rem 0;
+}
+
+.masonry-blur-bg {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 30px rgba(0, 45, 114, 0.08);
+    /* Hafifletildi */
+    border-radius: 16px;
+    /* Küçültüldü */
+    padding: 1.5rem;
+    /* Küçültüldü */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.centered-banner {
+    justify-content: center;
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+    /* Boşluk azaltıldı */
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: #fde68a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.tournament-bracket-double {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1.5rem;
+    /* Büyük GAP azaltıldı */
+    min-width: 1000px;
+    /* Azaltıldı */
+    padding-bottom: 2rem;
+}
+
+.bracket-side {
+    display: flex;
+    flex: 1;
+    gap: 1.5rem;
+    /* GAP azaltıldı */
+}
+
+.left-side {
+    flex-direction: row;
+}
+
+.right-side {
+    flex-direction: row-reverse;
+}
+
+.bracket-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+    min-width: 180px;
+    /* DAHA İNCE KARTLAR */
+    position: relative;
+}
+
+.bracket-round.final-round {
+    justify-content: center;
+}
+
+.round-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    /* Küçültüldü */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    padding: 8px;
+    /* Küçültüldü */
+    background: var(--isu-blue) !important;
+    color: white !important;
+    border-radius: 8px;
+    /* Küçültüldü */
+    box-shadow: 0 2px 6px rgba(0, 45, 114, 0.15);
+    position: absolute;
+    top: -40px;
+    /* Küçültüldü */
+    left: 0;
+    right: 0;
+}
+
+.final-title {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    color: white !important;
+    font-size: 1.05rem !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bracket-matchup {
+    position: relative;
+    margin: 1rem 0;
+    /* Küçültüldü */
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    /* Küçültüldü */
+    background: white;
+    border-radius: 10px;
+    /* Küçültüldü */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    /* Hafifletildi */
+    border: 1px solid var(--border-color);
+}
+
+.bracket-team {
+    padding: 0.6rem 0.8rem;
+    /* Padding azaltıldı */
+    font-size: 0.9rem;
+    /* Yazılar ufalttı */
+    font-weight: 600;
+    /* İnceldi */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.bracket-team.top-team {
+    border-radius: 10px 10px 0 0;
+}
+
+.bracket-team.bottom-team {
+    border-radius: 0 0 10px 10px;
+}
+
+.bracket-team .team-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    color: var(--text-main);
+}
+
+.bracket-team .team-score {
+    background: var(--isu-blue);
+    color: white;
+    min-width: 26px;
+    /* Küçültüldü */
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    /* Küçültüldü */
+    font-size: 0.85rem;
+    font-family: monospace;
+}
+
+.bracket-team.winner {
+    background: linear-gradient(to right, #ffffff, #f0f9ff);
+}
+
+.bracket-team.winner .team-name {
+    color: var(--isu-blue);
+}
+
+.bracket-team.winner .team-score {
+    background: #10b981;
+    /* Green score for winner */
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+.champion-box {
+    margin-top: 3rem;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #fde047;
+    box-shadow: 0 10px 25px rgba(234, 179, 8, 0.2);
+    position: relative;
+}
+
+.champion-box .trophy-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    animation: scale-up 2s ease-in-out infinite alternate;
+}
+
+.champion-box h3 {
+    margin: 0;
+    color: #b45309;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.champion-box .champion-name {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--isu-blue);
+    margin-top: 0.5rem;
+}
+
+@keyframes scale-up {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.5));
+    }
+
+    100% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.8));
+    }
+}
+
+/* Base Status Banner overrides */
+.status-banner {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.status-banner svg {
+    color: #d97706;
+}
+
+@media (max-width: 768px) {
+    .masonry-blur-bg {
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+    }
+}
+
+/* ── PREMIUM LIGHT MODE BRACKET OVERRIDE ── */
+/* ═════════════════════════════════════════════════════════════════════════
+   🏆 PREMIUM LIGHT MODE BRACKET OVERRIDE (200+ Lines High-End UI) 
+   ═════════════════════════════════════════════════════════════════════════ */
+
+/* ═════════════════════════════════════════════════════════════════════════
+   🎮 E-SPORTS NEON DARK THEME (Futuristic & Dynamic)
+   ═════════════════════════════════════════════════════════════════════════ */
+
+body.esports-neon-bracket {
+    /* 1. Deep Dark Background with Heavy Overlay on the Volleyball image */
+    background-image: linear-gradient(rgba(9, 9, 11, 0.55), rgba(9, 9, 11, 0.60)), url('voleybol topu ve güzel bir arka plan turnuva için.jpg') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-attachment: fixed !important;
+    background-color: #09090b !important;
+    color: #e4e4e7;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+}
+
+body.esports-neon-bracket::before,
+body.esports-neon-bracket header::before {
+    display: none !important;
+}
+
+/* ── Typography & Glowing Titles ── */
+body.esports-neon-bracket .text-volley {
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    letter-spacing: 6px;
+    text-shadow: 0 0 8px rgba(192, 132, 252, 0.5) !important;
+}
+
+body.esports-neon-bracket .text-tourney {
+    color: #38bdf8 !important;
+    font-weight: 800 !important;
+    letter-spacing: 4px;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.4) !important;
+}
+
+/* ── Glassmorphism Dark Container ── */
+body.esports-neon-bracket .bracket-page-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+body.esports-neon-bracket .masonry-blur-bg {
+    background: rgba(24, 24, 27, 0.55);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255,255,255,0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 rgba(24, 24, 27, 0.5);
+}
+
+body.esports-neon-bracket .masonry-blur-bg::-webkit-scrollbar { height: 8px; }
+body.esports-neon-bracket .masonry-blur-bg::-webkit-scrollbar-track { background: rgba(24, 24, 27, 0.5); border-radius: 8px; }
+body.esports-neon-bracket .masonry-blur-bg::-webkit-scrollbar-thumb { background-color: #8b5cf6; border-radius: 8px; }
+
+/* ── Status Banner (Live Glow) ── */
+body.esports-neon-bracket .status-banner {
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 12px;
+    color: #c084fc;
+    font-weight: 700;
+    box-shadow: none;
+    padding: 0.8rem 1.5rem;
+    display: inline-flex;
+    margin-bottom: 2rem;
+    align-items: center;
+    gap: 0.75rem;
+}
+@keyframes pulse-border {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 12px rgba(139, 92, 246, 0.25); }
+}
+body.esports-neon-bracket .status-banner svg {
+    color: #a855f7;
+    height: 20px;
+    width: 20px;
+    animation: spin-slow 4s linear infinite;
+}
+@keyframes spin-slow { 100% { transform: rotate(360deg); } }
+
+/* ── Tree Layout ── */
+body.esports-neon-bracket .tournament-bracket-double {
+    gap: 1.5rem;
+    min-width: 1200px;
+}
+body.esports-neon-bracket .bracket-side { gap: 1.5rem; }
+body.esports-neon-bracket .left-side { flex-direction: row; }
+body.esports-neon-bracket .right-side { flex-direction: row; }
+body.esports-neon-bracket .bracket-round {
+    min-width: 195px;
+    position: relative;
+    padding-top: 3.5rem;
+}
+
+/* ── Round Titles ── */
+body.esports-neon-bracket .round-title {
+    background: linear-gradient(180deg, #18181b 0%, #09090b 100%) !important;
+    border: 1px solid #27272a;
+    border-bottom: 2px solid #8b5cf6;
+    color: #e4e4e7 !important;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    text-align: center;
+    text-transform: uppercase;
+    z-index: 10;
+}
+body.esports-neon-bracket .final-title {
+    border-bottom: 2px solid #f59e0b;
+    color: #fcd34d !important;
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+/* ── Matchup Cards (The Core of E-Sports Design) ── */
+body.esports-neon-bracket .bracket-matchup {
+    margin: 1rem 0;
+    background: #18181b;
+    border-radius: 12px;
+    border: 1px solid #27272a;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+body.esports-neon-bracket .bracket-matchup:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: #8b5cf6;
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2), 0 0 15px rgba(139, 92, 246, 0.1);
+    z-index: 5;
+}
+
+/* Upcoming Match State */
+body.esports-neon-bracket .bracket-matchup.upcoming-match {
+    opacity: 0.6;
+    border: 1px dashed #3f3f46;
+    background: rgba(24, 24, 27, 0.3);
+}
+body.esports-neon-bracket .bracket-matchup.upcoming-match:hover {
+    opacity: 1;
+    border-color: #38bdf8;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+/* Empty team slot — minimal, boş ve soluk */
+body.esports-neon-bracket .bracket-team.empty-slot {
+    min-height: 38px;
+}
+body.esports-neon-bracket .bracket-team.empty-slot .team-name {
+    color: transparent;
+}
+
+/* Tamamlanmış maç — hafif yeşil kenarlık ile ayırt et */
+body.esports-neon-bracket .bracket-matchup.completed-match {
+    border-color: rgba(139, 92, 246, 0.5) !important;
+}
+
+/* Match Time Badge */
+body.esports-neon-bracket .match-time-badge {
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.3rem;
+    border-bottom: 1px solid #27272a;
+    letter-spacing: 1px;
+}
+
+/* ── Team Rows ── */
+body.esports-neon-bracket .bracket-team {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #a1a1aa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #27272a;
+    position: relative;
+    z-index: 2;
+    transition: background 0.3s ease;
+}
+body.esports-neon-bracket .bracket-team:last-child { border-bottom: none; }
+
+body.esports-neon-bracket .bracket-team .team-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 135px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Score Box */
+body.esports-neon-bracket .bracket-team .team-score {
+    background: #09090b;
+    color: #71717a;
+    border: 1px solid #3f3f46;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-weight: 800;
+}
+
+/* ── Winner Glow Effect ── */
+body.esports-neon-bracket .bracket-team.winner {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.15) 0%, rgba(24, 24, 27, 0) 100%);
+}
+
+body.esports-neon-bracket .bracket-team.winner::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%; width: 3px;
+    background: #8b5cf6;
+    box-shadow: 0 0 10px #8b5cf6;
+}
+
+body.esports-neon-bracket .bracket-team.winner .team-name {
+    color: #ffffff;
+    font-weight: 800;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+body.esports-neon-bracket .bracket-team.winner .team-score {
+    background: #8b5cf6;
+    color: #ffffff;
+    border-color: #a855f7;
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+}
+
+body.esports-neon-bracket .bracket-team.winner::after { display: none; }
+
+/* ── Animated Connectors ── */
+.esports-neon-bracket .bracket-matchup::after,
+.esports-neon-bracket .bracket-round:not(:first-child) .bracket-matchup::before {
+    background: linear-gradient(90deg, #3f3f46, #71717a);
+    height: 2px;
+    opacity: 0.5;
+}
+/* E-Sports dynamic connector gradient styling requires complex pseudo element math, 
+   but basic straight lines will inherit the clean grey */
+
+
+/* ── 🏆 FINAL ROUND — PREMIUM GOLD DISTINCTION ── */
+body.esports-neon-bracket .final-round {
+    min-width: 210px !important;
+    position: relative;
+    z-index: 10;
+}
+
+/* Final matchup kartı — Yarı Finalden çok daha belli */
+body.esports-neon-bracket .final-round .bracket-matchup {
+    background: linear-gradient(135deg, #1c1507 0%, #27180a 50%, #1c1507 100%);
+    border: 2px solid #f59e0b !important;
+    border-radius: 14px !important;
+    box-shadow:
+        0 0 20px rgba(245, 158, 11, 0.5),
+        0 0 40px rgba(245, 158, 11, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    transform: scale(1.08);
+    animation: final-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes final-pulse {
+    0%, 100% {
+        box-shadow:
+            0 0 12px rgba(245, 158, 11, 0.3),
+            0 0 20px rgba(245, 158, 11, 0.1);
+    }
+    50% {
+        box-shadow:
+            0 0 20px rgba(245, 158, 11, 0.5),
+            0 0 35px rgba(245, 158, 11, 0.2);
+    }
+}
+
+body.esports-neon-bracket .final-round .bracket-matchup:hover {
+    transform: scale(1.12) translateY(-4px);
+    box-shadow:
+        0 0 40px rgba(245, 158, 11, 0.8),
+        0 0 80px rgba(245, 158, 11, 0.4) !important;
+}
+
+/* Final takım satırları — altın vurgu */
+body.esports-neon-bracket .final-round .bracket-team {
+    padding: 0.9rem 1rem !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: #fde68a !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+
+body.esports-neon-bracket .final-round .bracket-team:last-child {
+    border-bottom: none !important;
+}
+
+body.esports-neon-bracket .final-round .bracket-team .team-name {
+    max-width: 130px;
+    color: #fef3c7;
+    text-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+/* Final skor kutucukları — altın */
+body.esports-neon-bracket .final-round .bracket-team .team-score {
+    background: rgba(245, 158, 11, 0.12) !important;
+    color: #f59e0b !important;
+    border: 1px solid rgba(245, 158, 11, 0.4) !important;
+    font-size: 1rem !important;
+    min-width: 32px !important;
+    height: 32px !important;
+}
+
+/* Final kazanan — altın + mor hybrid glow */
+body.esports-neon-bracket .final-round .bracket-team.winner::before {
+    background: linear-gradient(180deg, #f59e0b, #d97706) !important;
+    box-shadow: 0 0 12px #f59e0b !important;
+    width: 4px !important;
+}
+
+body.esports-neon-bracket .final-round .bracket-team.winner .team-name {
+    color: #fde047 !important;
+    text-shadow: 0 0 12px rgba(253, 224, 71, 0.8) !important;
+}
+
+body.esports-neon-bracket .final-round .bracket-team.winner .team-score {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    color: #000 !important;
+    border-color: #fbbf24 !important;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.7) !important;
+    font-weight: 900 !important;
+}
+
+/* Final maç saati rozeti — altın renk */
+body.esports-neon-bracket .final-round .match-time-badge {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #fcd34d !important;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.3) !important;
+    font-weight: 800 !important;
+}
+
+/* ── Champion Centerpiece ── */
+body.esports-neon-bracket .champion-box {
+    margin-top: 3rem;
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #18181b 0%, #09090b 100%);
+    border: 1px solid #f59e0b;
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.2), inset 0 0 20px rgba(245, 158, 11, 0.1);
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+}
+
+body.esports-neon-bracket .champion-box::before {
+    content: '';
+    position: absolute;
+    top: -50px; left: 50%;
+    transform: translateX(-50%);
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, rgba(0,0,0,0) 70%);
+    filter: blur(20px);
+    z-index: 0;
+    animation: champion-glow 3s infinite alternate;
+}
+@keyframes champion-glow {
+    0% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+}
+
+body.esports-neon-bracket .champion-box * {
+    position: relative;
+    z-index: 1;
+}
+
+body.esports-neon-bracket .champion-box .trophy-icon {
+    font-size: 4.5rem;
+    margin-bottom: 0.5rem;
+    animation: gold-bounce 3s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+    filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.5));
+}
+
+body.esports-neon-bracket .champion-box h3 {
+    color: #fcd34d;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    margin-bottom: 0.5rem;
+}
+
+body.esports-neon-bracket .champion-box .champion-name {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* ══════════════════════════════════════════════════
+   📱 MOBİL OPTİMİZASYON — esports-neon-bracket
+   ══════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+    body.esports-neon-bracket .masonry-blur-bg {
+        padding: 1.25rem 0.75rem;
+        border-radius: 16px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.esports-neon-bracket .tournament-bracket-double {
+        gap: 1rem;
+        min-width: 960px; /* tablet: yatay scroll */
+    }
+
+    body.esports-neon-bracket .bracket-round {
+        min-width: 170px;
+    }
+
+    body.esports-neon-bracket .bracket-team .team-name {
+        max-width: 110px;
+        font-size: 0.78rem;
+    }
+
+    body.esports-neon-bracket .text-volley {
+        font-size: 1.6rem !important;
+        letter-spacing: 3px;
+    }
+
+    body.esports-neon-bracket .text-tourney {
+        font-size: 0.85rem !important;
+        letter-spacing: 2px;
+    }
+}
+
+@media (max-width: 640px) {
+    /* Mobilde bracket: dikey liste görünümü */
+    body.esports-neon-bracket .tournament-bracket-double {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.5rem;
+        min-width: unset !important;
+    }
+
+    body.esports-neon-bracket .bracket-side,
+    body.esports-neon-bracket .left-side,
+    body.esports-neon-bracket .right-side {
+        flex-direction: column !important;
+        gap: 0.5rem;
+    }
+
+    body.esports-neon-bracket .bracket-center {
+        order: -1; /* Final'i en üste al */
+    }
+
+    body.esports-neon-bracket .bracket-round {
+        min-width: unset !important;
+        width: 100% !important;
+        padding-top: 0.5rem;
+    }
+
+    body.esports-neon-bracket .round-title {
+        position: static !important;
+        transform: none !important;
+        text-align: left;
+        padding: 0.4rem 0.75rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+    }
+
+    body.esports-neon-bracket .bracket-matchup {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 0.5rem;
+    }
+
+    body.esports-neon-bracket .bracket-team .team-name {
+        max-width: 200px;
+        font-size: 0.85rem;
+    }
+
+    /* Final kart mobilde scale olmadan */
+    body.esports-neon-bracket .final-round .bracket-matchup {
+        transform: none !important;
+        animation: none !important;
+        box-shadow: 0 0 12px rgba(245, 158, 11, 0.35) !important;
+    }
+
+    body.esports-neon-bracket .masonry-blur-bg {
+        padding: 1rem 0.6rem;
+        border-radius: 12px;
+        overflow-x: unset;
+    }
+
+    /* Bracket page genel padding */
+    body.esports-neon-bracket .bracket-page-container {
+        padding: 0 0.4rem;
+    }
+
+    /* Header daha kompakt */
+    body.esports-neon-bracket .text-volley {
+        font-size: 1.3rem !important;
+        letter-spacing: 2px;
+    }
+
+    body.esports-neon-bracket .text-tourney {
+        font-size: 0.75rem !important;
+        letter-spacing: 1px;
+    }
+
+    /* Şampiyon kutusu daha küçük */
+    body.esports-neon-bracket .champion-box {
+        padding: 1.5rem 1rem;
+        margin-top: 1.5rem;
+    }
+
+    body.esports-neon-bracket .champion-box .trophy-icon {
+        font-size: 3rem;
+    }
+
+    body.esports-neon-bracket .champion-box .champion-name {
+        font-size: 1.3rem;
+    }
 }

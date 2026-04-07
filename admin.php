@@ -192,20 +192,135 @@ $fullTeams = [];
 $incompleteTeams = [];
 
 if ($logged_in && $pdo) {
+    // ── Gelişmiş Turnuva Yönetimi İşlemleri ──
+    
+    // 1. Site Modu Güncelleme
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_site_mode'])) {
+        if (verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            $new_mode = $_POST['site_mode'] === 'bracket' ? 'bracket' : 'registration';
+            $stmt = $pdo->prepare("INSERT INTO settings (meta_key, meta_value) VALUES ('site_mode', ?) ON DUPLICATE KEY UPDATE meta_value = ?");
+            $stmt->execute([$new_mode, $new_mode]);
+            $action_msg = "Site modu başarıyla güncellendi: " . ($new_mode === 'bracket' ? 'Turnuva Ağacı' : 'Başvuru Formu');
+        }
+    }
+
+    // 2. Maç Verilerini Güncelleme (Tekli)
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_match'])) {
+        if (verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            $m_id = (int)$_POST['match_id'];
+            $t1_name = sanitizeInput($_POST['team1_name'] ?? '');
+            $t2_name = sanitizeInput($_POST['team2_name'] ?? '');
+            $s1 = (int)($_POST['score1'] ?? 0);
+            $s2 = (int)($_POST['score2'] ?? 0);
+            $w_name = sanitizeInput($_POST['winner_name'] ?? '');
+            $m_time = sanitizeInput($_POST['match_time'] ?? '');
+
+            try {
+                try { $pdo->exec("ALTER TABLE matches ADD COLUMN match_time VARCHAR(50) DEFAULT NULL"); } catch(PDOException $e) {}
+                $stmt = $pdo->prepare("UPDATE matches SET team1_name = ?, team2_name = ?, score1 = ?, score2 = ?, winner_name = ?, match_time = ? WHERE id = ?");
+                $stmt->execute([$t1_name, $t2_name, $s1, $s2, $w_name, $m_time, $m_id]);
+                $stmt = $pdo->prepare("SELECT next_match_id, next_match_slot FROM matches WHERE id = ?");
+                $stmt->execute([$m_id]);
+                $next = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($next && $next['next_match_id'] && !empty($w_name)) {
+                    $slot_col = ($next['next_match_slot'] == 1) ? 'team1_name' : 'team2_name';
+                    $stmt = $pdo->prepare("UPDATE matches SET $slot_col = ? WHERE id = ?");
+                    $stmt->execute([$w_name, $next['next_match_id']]);
+                }
+                $action_msg = "Maç bilgileri güncellendi.";
+            } catch (PDOException $e) {
+                $action_err = "Maç güncelleme hatası: " . $e->getMessage();
+            }
+        }
+    }
+
+    // 2b. TOPLU Maç Güncelleme
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['bulk_update_matches'])) {
+        if (verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            $matches_data = $_POST['matches'] ?? [];
+            $updated = 0;
+            try {
+                try { $pdo->exec("ALTER TABLE matches ADD COLUMN match_time VARCHAR(50) DEFAULT NULL"); } catch(PDOException $e) {}
+
+                $stmt_update = $pdo->prepare(
+                    "UPDATE matches SET team1_name = ?, team2_name = ?, score1 = ?, score2 = ?, winner_name = ?, match_time = ? WHERE id = ?"
+                );
+
+                // ─── 1. GEÇİŞ: Tüm maç verilerini kaydet ───
+                foreach ($matches_data as $mid => $data) {
+                    $mid    = (int)$mid;
+                    $t1     = sanitizeInput($data['team1_name'] ?? '');
+                    $t2     = sanitizeInput($data['team2_name'] ?? '');
+                    $s1     = (int)($data['score1'] ?? 0);
+                    $s2     = (int)($data['score2'] ?? 0);
+                    $winner = sanitizeInput($data['winner_name'] ?? '');
+                    $mtime  = sanitizeInput($data['match_time'] ?? '');
+
+                    $stmt_update->execute([$t1, $t2, $s1, $s2, $winner, $mtime, $mid]);
+                    $updated++;
+                }
+
+                // ─── 2. GEÇİŞ: Kazananları bir sonraki tura ilerlet ───
+                $stmt_nxt = $pdo->prepare(
+                    "SELECT next_match_id, next_match_slot FROM matches WHERE id = ?"
+                );
+                $stmt_adv = $pdo->prepare(
+                    "UPDATE matches SET team1_name = ? WHERE id = ?"
+                );
+                $stmt_adv2 = $pdo->prepare(
+                    "UPDATE matches SET team2_name = ? WHERE id = ?"
+                );
+
+                foreach ($matches_data as $mid => $data) {
+                    $mid    = (int)$mid;
+                    $winner = sanitizeInput($data['winner_name'] ?? '');
+
+                    if (empty($winner)) continue; // kazanan yoksa atla
+
+                    $stmt_nxt->execute([$mid]);
+                    $next = $stmt_nxt->fetch(PDO::FETCH_ASSOC);
+
+                    if ($next && !empty($next['next_match_id'])) {
+                        $next_id   = (int)$next['next_match_id'];
+                        $next_slot = (int)$next['next_match_slot'];
+
+                        if ($next_slot === 1) {
+                            $stmt_adv->execute([$winner, $next_id]);
+                        } else {
+                            $stmt_adv2->execute([$winner, $next_id]);
+                        }
+                    }
+                }
+
+                $action_msg = "✅ $updated maç toplu olarak kaydedildi. Kazananlar bir sonraki tura aktarıldı.";
+            } catch (PDOException $e) {
+                $action_err = "Toplu güncelleme hatası: " . $e->getMessage();
+            }
+        }
+    }
+
     try {
         $stmt = $pdo->query("SELECT * FROM registrations ORDER BY created_at ASC");
         $registrations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         foreach ($registrations as $reg) {
-            // Check if team name ends with (Eksik Kadro) or matches the placeholder
             if (strpos($reg['team_name'], '(Eksik Kadro)') !== false || $reg['team_name'] === 'Bireysel/Eksik Başvuru') {
                 $incompleteTeams[] = $reg;
             } else {
                 $fullTeams[] = $reg;
             }
         }
+
+        // Ayarları Çek
+        $stmt = $pdo->query("SELECT * FROM settings WHERE meta_key = 'site_mode'");
+        $site_mode_row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $site_mode = $site_mode_row ? $site_mode_row['meta_value'] : 'registration';
+
+        // Maçları Çek
+        $stmt = $pdo->query("SELECT * FROM matches ORDER BY round ASC, match_order ASC");
+        $matches = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     } catch (PDOException $e) {
-        // Tablo olmayabilir
         if (strpos($e->getMessage(), "Base table or view not found") === false) {
             $error = "Veri çekme hatası: " . $e->getMessage();
         }
@@ -222,9 +337,19 @@ if ($logged_in && $pdo) {
     <link rel="stylesheet" href="style.css?v=4">
     <style>
         body {
-            align-items: flex-start;
-            padding-top: 3rem;
+            display: block;        /* flex yerine block — admin grid'ini bozmasın */
+            justify-content: unset;
+            align-items: unset;
+            padding: 2rem 1rem;
             min-height: 100vh;
+        }
+
+        /* Kayıt formuna özgü fixed elementleri admin panelinde gizle */
+        .sks-logo, .sks-logo-link,
+        .fab-whatsapp,
+        .mobile-sticky-bar,
+        .court-line {
+            display: none !important;
         }
 
         /* ── Modern Premium Login Box ── */
@@ -495,6 +620,267 @@ if ($logged_in && $pdo) {
             border: 1px solid var(--border-color);
             border-radius: 12px;
         }
+
+        /* ── Turnuva Yönetimi Özel Stilleri ── */
+        .mode-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #e2e8f0;
+        }
+        .mode-info h3 { margin: 0; color: var(--isu-blue); font-size: 1.2rem; }
+        .mode-info p { margin: 0.3rem 0 0 0; font-size: 0.9rem; color: var(--text-muted); }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 240px;
+            height: 44px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 34px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 36px;
+            width: 110px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        input:checked + .toggle-slider { background-color: var(--isu-blue); }
+        input:checked + .toggle-slider:before { transform: translateX(122px); }
+        
+        .toggle-label {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            transition: color 0.3s;
+            pointer-events: none;
+        }
+        input:checked + .toggle-slider .label-reg { color: white; opacity: 0.5; }
+        input:checked + .toggle-slider .label-bracket { color: var(--isu-blue); }
+        input:not(:checked) + .toggle-slider .label-reg { color: var(--isu-blue); }
+        input:not(:checked) + .toggle-slider .label-bracket { color: white; opacity: 0.5; }
+
+        /* ── Maç Kartları (Turnuva Yönetimi) ── */
+        .bracket-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .match-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .match-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        /* Tur renk kodu: header şeridi */
+        .match-card-header {
+            padding: 0.65rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .round-1 .match-card-header { background: linear-gradient(90deg, #f1f5f9, #e2e8f0); border-bottom: 2px solid #94a3b8; }
+        .round-2 .match-card-header { background: linear-gradient(90deg, #eff6ff, #dbeafe); border-bottom: 2px solid #60a5fa; }
+        .round-3 .match-card-header { background: linear-gradient(90deg, #f0fdf4, #dcfce7); border-bottom: 2px solid #4ade80; }
+        .round-4 .match-card-header { background: linear-gradient(90deg, #fffbeb, #fef3c7); border-bottom: 2px solid #fbbf24; }
+
+        .match-round-tag {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .round-1 .match-round-tag { background: #e2e8f0; color: #475569; }
+        .round-2 .match-round-tag { background: #dbeafe; color: #1d4ed8; }
+        .round-3 .match-round-tag { background: #dcfce7; color: #15803d; }
+        .round-4 .match-round-tag { background: #fef3c7; color: #b45309; }
+
+        .match-id-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #94a3b8;
+        }
+
+        .match-card-body {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* Takım satırı */
+        .team-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .team-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #94a3b8;
+            min-width: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .team-row input[type="text"] {
+            flex: 1;
+            padding: 0.55rem 0.75rem;
+            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #f8fafc;
+        }
+        .team-row input[type="text"]:focus {
+            outline: none;
+            border-color: var(--isu-blue);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 45, 114, 0.08);
+        }
+        .team-row input[type="number"] {
+            width: 52px;
+            height: 38px;
+            padding: 0.3rem;
+            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--text-main);
+            background: #f8fafc;
+            transition: border-color 0.2s;
+        }
+        .team-row input[type="number"]:focus {
+            outline: none;
+            border-color: var(--isu-blue);
+            background: white;
+        }
+
+        .vs-divider {
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #cbd5e1;
+            letter-spacing: 1px;
+            padding: 0 0.25rem;
+        }
+
+        /* Kazanı seçimi */
+        .winner-select {
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+        }
+        .winner-select label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #059669;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .winner-select select {
+            width: 100%;
+            padding: 0.55rem 0.75rem;
+            border-radius: 8px;
+            border: 1.5px solid #10b981;
+            color: #059669;
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: #f0fdf4;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .winner-select select:focus { outline: none; border-color: #059669; }
+
+        /* Güncelle butonu */
+        .update-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--isu-blue) 0%, #0047b3 100%);
+            color: white;
+            border: none;
+            padding: 0.65rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+        .update-btn:hover {
+            background: linear-gradient(135deg, #003380 0%, #005ce6 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 45, 114, 0.3);
+        }
+        .update-btn:active { transform: translateY(0); }
+
+        /* Toplu Kaydet Butonu */
+        .bulk-save-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .bulk-save-btn:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+        }
+        .bulk-save-btn:active { transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -698,16 +1084,154 @@ if ($logged_in && $pdo) {
             </style>
             
             <div class="admin-tabs">
-                <button class="tab-btn active" onclick="switchTab('records')">
+                <button class="tab-btn active" id="tab-records" onclick="switchTab('records')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     Kayıtlar
                 </button>
-                <button class="tab-btn" onclick="switchTab('settings')">
+                <button class="tab-btn" id="tab-tournament" onclick="switchTab('tournament')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2 4-4"></path><path d="m3 3 18 18"></path><path d="M7 11V7a5 5 0 0 1 7-4.6"></path><path d="M21 11v11"></path><path d="M3 11v11"></path><path d="m15 11 6 6"></path></svg>
+                    Turnuva Yönetimi
+                </button>
+                <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     Ayarlar
                 </button>
             </div>
             
+            <!-- TURNUVA YÖNETİMİ TAB -->
+            <div id="tournament" class="tab-content">
+                <div class="mode-card">
+                    <div class="mode-info">
+                        <h3>Site Görünüm Modu</h3>
+                        <p>Web sitesinde başvuru formu mu yoksa turnuva ağacı mı görünsün?</p>
+                    </div>
+                    <form method="POST" id="mode-form">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generateCsrfToken()); ?>">
+                        <input type="hidden" name="update_site_mode" value="1">
+                        <label class="toggle-switch">
+                            <input type="checkbox" name="site_mode" value="bracket" <?php echo ($site_mode === 'bracket' ? 'checked' : ''); ?> onchange="document.getElementById('mode-form').submit();">
+                            <span class="toggle-slider">
+                                <span class="toggle-label label-reg">Kayıt Formu</span>
+                                <span class="toggle-label label-bracket">Turnuva Ağacı</span>
+                            </span>
+                        </label>
+                    </form>
+                </div>
+
+                <div class="bracket-editor">
+                    <h3 style="color: var(--isu-blue); margin-top: 2rem;">16 Takımlık Turnuva Ağacı Maçları</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Tüm değişiklikleri yaptıktan sonra en alttaki <strong>Tümünü Kaydet</strong> butonuna basın.</p>
+
+                    <!-- TEK FORM — Toplu Güncelleme -->
+                    <form method="POST" id="bulk-match-form">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generateCsrfToken()); ?>">
+                        <input type="hidden" name="bulk_update_matches" value="1">
+
+                        <!-- Üst Kaydet Butonu -->
+                        <div style="display: flex; justify-content: flex-end; margin: 1rem 0 0.5rem;">
+                            <button type="submit" class="bulk-save-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                Tümünü Kaydet
+                            </button>
+                        </div>
+
+                        <div class="bracket-grid">
+                        <?php
+                        $rounds = [
+                            1 => "Son 16 (Round of 16)",
+                            2 => "Çeyrek Final",
+                            3 => "Yarı Final",
+                            4 => "Final"
+                        ];
+
+                        foreach ($matches as $match):
+                            $roundClass = 'round-' . $match['round'];
+                            $mid = $match['id'];
+                        ?>
+                            <div class="match-card <?php echo $roundClass; ?>">
+                                <!-- Kart Başlığı -->
+                                <div class="match-card-header">
+                                    <span class="match-round-tag"><?php echo $rounds[$match['round']]; ?></span>
+                                    <span class="match-id-tag">Maç #<?php echo $mid; ?></span>
+                                </div>
+
+                                <div class="match-card-body">
+
+                                    <!-- Maç Saati -->
+                                    <div style="padding: 0.5rem 0.75rem; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border-radius: 8px; border: 1px solid #bae6fd;">
+                                        <label style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; font-weight: 800; color: #0369a1; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.4px;">
+                                            🕒 Maç Saati / Tarih
+                                        </label>
+                                        <input type="text"
+                                            name="matches[<?php echo $mid; ?>][match_time]"
+                                            value="<?php echo htmlspecialchars($match['match_time'] ?? ''); ?>"
+                                            placeholder="örn: 12 Nisan 14:00"
+                                            style="width: 100%; border: 1.5px solid #7dd3fc; border-radius: 6px; padding: 0.4rem 0.6rem; font-size: 0.85rem; background: white; text-align: center; font-weight: 600; color: #0c4a6e; outline: none;"
+                                            onfocus="this.style.borderColor='#0284c7'"
+                                            onblur="this.style.borderColor='#7dd3fc'"
+                                        >
+                                    </div>
+
+                                    <!-- Takım 1 -->
+                                    <div class="team-row">
+                                        <span class="team-label">T1</span>
+                                        <input type="text" name="matches[<?php echo $mid; ?>][team1_name]"
+                                            value="<?php echo htmlspecialchars($match['team1_name'] ?? ''); ?>"
+                                            placeholder="1. Takım Adı">
+                                        <input type="number" name="matches[<?php echo $mid; ?>][score1]"
+                                            value="<?php echo $match['score1']; ?>"
+                                            min="0" title="Skor">
+                                    </div>
+
+                                    <div class="vs-divider">— VS —</div>
+
+                                    <!-- Takım 2 -->
+                                    <div class="team-row">
+                                        <span class="team-label">T2</span>
+                                        <input type="text" name="matches[<?php echo $mid; ?>][team2_name]"
+                                            value="<?php echo htmlspecialchars($match['team2_name'] ?? ''); ?>"
+                                            placeholder="2. Takım Adı">
+                                        <input type="number" name="matches[<?php echo $mid; ?>][score2]"
+                                            value="<?php echo $match['score2']; ?>"
+                                            min="0" title="Skor">
+                                    </div>
+
+                                    <!-- Kazanan Seç -->
+                                    <div class="winner-select">
+                                        <label>🏆 Kazanan</label>
+                                        <select name="matches[<?php echo $mid; ?>][winner_name]">
+                                            <option value="">— Seçilmedi —</option>
+                                            <?php if(!empty($match['team1_name'])): ?>
+                                                <option value="<?php echo htmlspecialchars($match['team1_name']); ?>"
+                                                    <?php echo ($match['winner_name'] == $match['team1_name'] ? 'selected' : ''); ?>>
+                                                    <?php echo htmlspecialchars($match['team1_name']); ?>
+                                                </option>
+                                            <?php endif; ?>
+                                            <?php if(!empty($match['team2_name'])): ?>
+                                                <option value="<?php echo htmlspecialchars($match['team2_name']); ?>"
+                                                    <?php echo ($match['winner_name'] == $match['team2_name'] ? 'selected' : ''); ?>>
+                                                    <?php echo htmlspecialchars($match['team2_name']); ?>
+                                                </option>
+                                            <?php endif; ?>
+                                        </select>
+                                    </div>
+
+                                </div><!-- /match-card-body -->
+                            </div>
+                        <?php endforeach; ?>
+                        </div><!-- /bracket-grid -->
+
+                        <!-- Alt Kaydet Butonu -->
+                        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+                            <button type="submit" class="bulk-save-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                Tümünü Kaydet
+                            </button>
+                        </div>
+                    </form><!-- /bulk-match-form -->
+                </div>
+            </div>
+
             <!-- KAYITLAR TAB -->
             <div id="records" class="tab-content active">
                 <div class="table-responsive" style="margin-bottom: 3rem;">
