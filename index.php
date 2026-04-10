@@ -391,6 +391,7 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
                         <li><strong>Sayılar:</strong> İlk iki set 25 sayı, karar seti (3. set) 15 sayı üzerinden oynanır.</li>
                         <li><strong>Uzatma:</strong> Her iki durumda da setin bitmesi için en az 2 fark zorunludur.</li>
                         <li><strong>Saha Değişimi:</strong> Her set sonunda saha değişimi yapılır.</li>
+                        <li><strong>Takım Sayısı:</strong> Turnuvaya en fazla 16 takım başvurabilir.</li>
                     </ul>
                     <h4>Oyuncu Değişikliği ve Diskalifiye</h4>
                     <ul>
@@ -406,6 +407,7 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
                         <li><strong>Disiplin:</strong> Tartışma veya sportmenlik dışı durumlarda "Turnuva Kurulu" kararıyla takım diskalifire edilebilir. İleri derecedeki ihlaller üniversite disiplin kuruluna sevk edilecektir.</li>
                         <li><strong>Kıyafet (Dresscode):</strong> Turnuva genelinde uygulanacak kıyafet düzeni turnuva başlangıcından birkaç gün önce duyurulacaktır. Tüm takımların yapılacak duyuruya göre hazırlıklı gelmesi zorunludur.</li>
                         <li><strong>Gecikme:</strong> Maç saatinde sahada hazır bulunmayan takım, 15 dakikalık bekleme süresinin ardından hükmen mağlup sayılır.</li>
+                        <li><strong>Okul Takımı Oyuncuları:</strong> Turnuvaya katılan her takımda, okul voleybol takımından en fazla 3 oyuncu bulunabilir. Bu kuralın ihlali durumunda takım turnuvadan diskalifiye edilir.</li>
                     </ul>
                     <h4>Puanlama Sistemi (Grup Aşaması)</h4>
                     <ul>
@@ -560,6 +562,7 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
                         <li><strong>Points:</strong> First two sets to 25 points; deciding set (3rd) to 15 points.</li>
                         <li><strong>Deuce:</strong> A minimum 2-point advantage is required to finish any set.</li>
                         <li><strong>Court Switch:</strong> Teams switch sides after each set.</li>
+                        <li><strong>Team Limit:</strong> A maximum of 16 teams can apply for the tournament.</li>
                     </ul>
                     <h4>Substitutions and Disqualification</h4>
                     <ul>
@@ -575,6 +578,7 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
                         <li><strong>Discipline:</strong> In cases of disputes or unsportsmanlike conduct, the Tournament Committee may disqualify a team. Serious violations will be referred to the university disciplinary board.</li>
                         <li><strong>Dresscode:</strong> The dress code for the tournament will be announced a few days before the event. All teams must be prepared according to the announcement.</li>
                         <li><strong>Delay:</strong> A team not ready on court at match time will be declared the loser by default after a 15-minute waiting period.</li>
+                        <li><strong>School Team Players:</strong> Each participating team may have at most 3 players from the official school volleyball team. Violation of this rule results in disqualification.</li>
                     </ul>
                     <h4>Scoring System (Group Stage)</h4>
                     <ul>
