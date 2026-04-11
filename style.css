@@ -1287,6 +1287,12 @@ body.lang-en header p.en-content {
     padding: 0 1rem;
 }
 
+.bracket-rules-wrapper {
+    max-width: 850px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
 .bracket-header {
     background: transparent;
     text-align: center;

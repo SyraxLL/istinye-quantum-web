@@ -211,6 +211,100 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
                 <p class="tr-content" style="font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.5);">Turnuva boyunca tüm maçlar İstinye Üniversitesi kampüsünde oynanacaktır.</p>
                 <p class="en-content" style="display:none; font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.5);">All matches will be played at Istinye University campus throughout the tournament.</p>
             </div>
+
+            <div class="bracket-rules-wrapper">
+                <div class="rules-section tr-content">
+                    <div class="rules-title">📋 Turnuva Kuralları</div>
+                    <div class="rules-content">
+                        <h4>Takım Yapısı ve Başvuru Esasları</h4>
+                        <ul>
+                            <li><strong>Katılım Şartı:</strong> Turnuvaya sadece İstinye Üniversitesi öğrencileri katılabilir.</li>
+                            <li><strong>Başvuru:</strong> Takımınız varsa bir Takım İsmi ile, yoksa "Bireysel" veya "Eksik Takım" olarak başvuruda bulunabilirsiniz.</li>
+                            <li><strong>Kadro:</strong> Tam takımlar en az 7, en fazla 12 oyuncudan oluşmalıdır. Bireysel başvurular, ekibimiz tarafından uygun takımlara yerleştirilecektir.</li>
+                            <li><strong>Cinsiyet:</strong> Her takımın kadrosunda en az 2 kadın oyuncu bulunması zorunludur; sahada her an en az 2 kadın oyuncu aktif oynamak zorundadır. Kadın oyuncu yerine erkek oyuncu girerek sayının 1'e düşmesi kural ihlalidir.</li>
+                            <li class="whatsapp-warning"><strong>⚠️ TÜM DUYURULAR WHATSAPP KANALDA YAPILACAĞINDAN DOLAYI KANALA KATILMAK ÇOK ÖNEMLİDİR.</strong></li>
+                            <li class="whatsapp-link-item"><a href="https://chat.whatsapp.com/F1qZB7Tya5cKsrYvxG93gc" target="_blank" rel="noopener noreferrer" class="whatsapp-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp Kanalına Katıl</a></li>
+                        </ul>
+                        <h4>Maç Formatı ve Sayı Sistemi</h4>
+                        <ul>
+                            <li><strong>Set Sistemi:</strong> Maçlar "3 set üzerinden 2 set alan kazanır" formatında oynanır.</li>
+                            <li><strong>Sayılar:</strong> İlk iki set 25 sayı, karar seti (3. set) 15 sayı üzerinden oynanır.</li>
+                            <li><strong>Uzatma:</strong> Her iki durumda da setin bitmesi için en az 2 fark zorunludur.</li>
+                            <li><strong>Saha Değişimi:</strong> Her set sonunda saha değişimi yapılır.</li>
+                            <li><strong>Takım Sayısı:</strong> Turnuvaya en fazla 16 takım başvurabilir.</li>
+                        </ul>
+                        <h4>Oyuncu Değişikliği ve Diskalifiye</h4>
+                        <ul>
+                            <li><strong>Değişiklik Hakkı:</strong> Bir takım her sette en fazla 4 kez oyuncu değişikliği yapabilir.</li>
+                            <li><strong>Eksik Kalma:</strong> Diskalifiye sonrası yedek kalmazsa o set hükmen kaybedilir.</li>
+                            <li><strong>Servis:</strong> Hakem düdüğünden sonra 8 saniye içinde kullanılmalıdır; çizgi ihlali hatadır.</li>
+                            <li><strong>Temas:</strong> Topa vücudun her yeriyle vurulabilir; "tutma" veya "taşıma" ihlalleri faul sayılır.</li>
+                            <li><strong>İhlaller:</strong> File teması ve orta çizgiyi tam ayakla ihlal etmek yasaktır.</li>
+                        </ul>
+                        <h4>Disiplin ve Genel Kurallar</h4>
+                        <ul>
+                            <li><strong>Hakem Yetkisi:</strong> Maç esnasında hakemin kararları esastır ve tartışılamaz.</li>
+                            <li><strong>Disiplin:</strong> Tartışma veya sportmenlik dışı durumlarda "Turnuva Kurulu" kararıyla takım diskalifire edilebilir. İleri derecedeki ihlaller üniversite disiplin kuruluna sevk edilecektir.</li>
+                            <li><strong>Kıyafet (Dresscode):</strong> Turnuva genelinde uygulanacak kıyafet düzeni turnuva başlangıcından birkaç gün önce duyurulacaktır. Tüm takımların yapılacak duyuruya göre hazırlıklı gelmesi zorunludur.</li>
+                            <li><strong>Gecikme:</strong> Maç saatinde sahada hazır bulunmayan takım, 15 dakikalık bekleme süresinin ardından hükmen mağlup sayılır.</li>
+                            <li><strong>Okul Takımı Oyuncuları:</strong> Turnuvaya katılan her takımda, okul voleybol takımından en fazla 3 oyuncu bulunabilir. Bu kuralın ihlali durumunda takım turnuvadan diskalifiye edilir.</li>
+                        </ul>
+                        <h4>Puanlama Sistemi (Grup Aşaması)</h4>
+                        <ul>
+                            <li><strong>2-0 Galibiyet:</strong> 3 Puan</li>
+                            <li><strong>2-1 Galibiyet:</strong> 2 Puan</li>
+                            <li><strong>1-2 Mağlubiyet:</strong> 1 Puan</li>
+                            <li><strong>0-2 Mağlubiyet:</strong> 0 Puan</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="rules-section en-content" style="display:none;">
+                    <div class="rules-title">📋 Tournament Rules</div>
+                    <div class="rules-content">
+                        <h4>Team Structure and Registration Rules</h4>
+                        <ul>
+                            <li><strong>Eligibility:</strong> Only Istinye University students may participate.</li>
+                            <li><strong>Registration:</strong> You can apply with a Team Name if you have one, or as "Individual" or "Incomplete Team" if you don't.</li>
+                            <li><strong>Roster:</strong> Full teams must have 7 to 12 players. Individual applicants will be placed into suitable teams by our staff.</li>
+                            <li><strong>Gender:</strong> Each roster must include at least 2 female players; at all times at least 2 female players must be active on court. Replacing a female player with a male player reducing the count to 1 is a rule violation.</li>
+                            <li class="whatsapp-warning"><strong>⚠️ ALL ANNOUNCEMENTS WILL BE MADE ON THE WHATSAPP CHANNEL — JOINING IS ESSENTIAL.</strong></li>
+                            <li class="whatsapp-link-item"><a href="https://chat.whatsapp.com/F1qZB7Tya5cKsrYvxG93gc" target="_blank" rel="noopener noreferrer" class="whatsapp-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Join WhatsApp Channel</a></li>
+                        </ul>
+                        <h4>Match Format and Scoring</h4>
+                        <ul>
+                            <li><strong>Set System:</strong> Matches are played in a best-of-3 sets format (first to win 2 sets).</li>
+                            <li><strong>Points:</strong> First two sets to 25 points; deciding set (3rd) to 15 points.</li>
+                            <li><strong>Deuce:</strong> A minimum 2-point advantage is required to finish any set.</li>
+                            <li><strong>Court Switch:</strong> Teams switch sides after each set.</li>
+                            <li><strong>Team Limit:</strong> A maximum of 16 teams can apply for the tournament.</li>
+                        </ul>
+                        <h4>Substitutions and Disqualification</h4>
+                        <ul>
+                            <li><strong>Substitutions:</strong> Each team may make up to 4 substitutions per set.</li>
+                            <li><strong>Shortage:</strong> If a disqualified player leaves no bench players, that set is forfeited.</li>
+                            <li><strong>Serve:</strong> Must be served within 8 seconds of the referee's whistle; foot faults are an error.</li>
+                            <li><strong>Contact:</strong> The ball may be played with any body part; holding or carrying results in a fault.</li>
+                            <li><strong>Violations:</strong> Touching the net or fully crossing the center line is prohibited.</li>
+                        </ul>
+                        <h4>Discipline and General Rules</h4>
+                        <ul>
+                            <li><strong>Referee Authority:</strong> The referee's decisions during the match are final and cannot be disputed.</li>
+                            <li><strong>Discipline:</strong> In cases of disputes or unsportsmanlike conduct, the Tournament Committee may disqualify a team. Serious violations will be referred to the university disciplinary board.</li>
+                            <li><strong>Dresscode:</strong> The dress code for the tournament will be announced a few days before the event. All teams must be prepared according to the announcement.</li>
+                            <li><strong>Delay:</strong> A team not ready on court at match time will be declared the loser by default after a 15-minute waiting period.</li>
+                            <li><strong>School Team Players:</strong> Each participating team may have at most 3 players from the official school volleyball team. Violation of this rule results in disqualification.</li>
+                        </ul>
+                        <h4>Scoring System (Group Stage)</h4>
+                        <ul>
+                            <li><strong>2-0 Win:</strong> 3 Points</li>
+                            <li><strong>2-1 Win:</strong> 2 Points</li>
+                            <li><strong>1-2 Loss:</strong> 1 Point</li>
+                            <li><strong>0-2 Loss:</strong> 0 Points</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Orijinal JS'nin çalışması için gizli dummy checkbox -->
