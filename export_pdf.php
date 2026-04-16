@@ -19,7 +19,23 @@ if ($env && isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'])) {
         $pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'] ?? '');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-        $stmt = $pdo->query("SELECT * FROM registrations ORDER BY created_at ASC");
+        // ID Filtreleme Kontrolü
+        $whereClause = "";
+        $params = [];
+        if (isset($_GET['ids']) && !empty($_GET['ids'])) {
+            $idList = explode(',', $_GET['ids']);
+            $idList = array_map('intval', $idList); // Sayısal değerlere zorla
+            $idList = array_filter($idList); // 0 veya geçersizleri temizle
+            
+            if (!empty($idList)) {
+                $placeholders = implode(',', array_fill(0, count($idList), '?'));
+                $whereClause = " WHERE id IN ($placeholders) ";
+                $params = $idList;
+            }
+        }
+        
+        $stmt = $pdo->prepare("SELECT * FROM registrations $whereClause ORDER BY created_at ASC");
+        $stmt->execute($params);
         $registrations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         foreach ($registrations as $reg) {

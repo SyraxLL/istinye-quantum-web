@@ -950,9 +950,9 @@ if ($logged_in && $pdo) {
                 </span>
             </h1>
             <div style="display: flex; gap: 0.8rem; align-items: center;">
-                <a href="export_pdf.php" target="_blank" class="login-btn" style="display: inline-flex; margin: 0; width: auto; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); line-height: 1.2; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); font-size: 0.95rem; font-family: system-ui, -apple-system, sans-serif; border: none; border-radius: 8px; color: white; cursor: pointer; text-decoration: none; font-weight: bold;">
+                <a href="javascript:void(0)" onclick="exportSelectedPDF()" class="login-btn" style="display: inline-flex; margin: 0; width: auto; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); line-height: 1.2; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); font-size: 0.95rem; font-family: system-ui, -apple-system, sans-serif; border: none; border-radius: 8px; color: white; cursor: pointer; text-decoration: none; font-weight: bold;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    PDF İndir
+                    Seçilileri PDF Yap
                 </a>
                 <a href="?logout=1" class="logout-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -1239,6 +1239,9 @@ if ($logged_in && $pdo) {
                     <table>
                         <thead>
                             <tr>
+                                <th style="width: 40px; text-align: center;">
+                                    <input type="checkbox" id="select-all-full" onclick="toggleSelectAll('full')">
+                                </th>
                                 <th>No</th>
                                 <th>Takım Adı</th>
                                 <th>Kaptan Bilgileri</th>
@@ -1249,6 +1252,9 @@ if ($logged_in && $pdo) {
                         <tbody>
                             <?php foreach ($fullTeams as $index => $row): ?>
                             <tr>
+                                <td style="text-align: center;">
+                                    <input type="checkbox" class="team-checkbox checkbox-full" value="<?php echo $row['id']; ?>">
+                                </td>
                                 <td style="font-weight: 700; color: var(--text-muted);">
                                     #<?php echo ($index + 1); ?>
                                 </td>
@@ -1316,6 +1322,9 @@ if ($logged_in && $pdo) {
                     <table style="background: white; border-radius: 8px; overflow: hidden;">
                         <thead style="background: #fee2e2; color: #991b1b;">
                             <tr>
+                                <th style="width: 40px; text-align: center;">
+                                    <input type="checkbox" id="select-all-incomplete" onclick="toggleSelectAll('incomplete')">
+                                </th>
                                 <th>No</th>
                                 <th>Takım Adı</th>
                                 <th>Kaptan Bilgileri</th>
@@ -1326,6 +1335,9 @@ if ($logged_in && $pdo) {
                         <tbody>
                             <?php foreach ($incompleteTeams as $index => $row): ?>
                             <tr style="border-bottom: 1px solid #fecaca;">
+                                <td style="text-align: center;">
+                                    <input type="checkbox" class="team-checkbox checkbox-incomplete" value="<?php echo $row['id']; ?>">
+                                </td>
                                 <td style="font-weight: 700; color: #991b1b;">
                                     #<?php echo ($index + 1); ?>
                                 </td>
@@ -1585,6 +1597,24 @@ if ($logged_in && $pdo) {
                     document.getElementById('teamModal').style.display = 'none';
                 }
                 
+                
+                function toggleSelectAll(type) {
+                    const master = document.getElementById('select-all-' + type);
+                    const checkboxes = document.querySelectorAll('.checkbox-' + type);
+                    checkboxes.forEach(cb => cb.checked = master.checked);
+                }
+
+                function exportSelectedPDF() {
+                    const selected = Array.from(document.querySelectorAll('.team-checkbox:checked')).map(cb => cb.value);
+                    if (selected.length === 0) {
+                        alert('Lütfen PDF\'e eklemek istediğiniz takımları seçin.');
+                        return;
+                    }
+                    
+                    const url = 'export_pdf.php?ids=' + selected.join(',');
+                    window.open(url, '_blank');
+                }
+
                 <?php if ($settings_msg || $settings_err): ?>
                     // Eğer şifre değistirme işlemi yapıldıysa direkt Ayarlar sekmesini aç
                     document.querySelectorAll('.tab-btn')[1].classList.add('active');
